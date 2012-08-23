@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/freezy/android-xbmcremote.git/!svn/ver/695/trunk/src/org/xbmc/eventclient
+END
+EventClient.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/freezy/android-xbmcremote.git/!svn/ver/695/trunk/src/org/xbmc/eventclient/EventClient.java
+END
+PacketMOUSE.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/freezy/android-xbmcremote.git/!svn/ver/3/trunk/src/org/xbmc/eventclient/PacketMOUSE.java
+END
+PacketBUTTON.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/freezy/android-xbmcremote.git/!svn/ver/3/trunk/src/org/xbmc/eventclient/PacketBUTTON.java
+END
+PacketACTION.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/freezy/android-xbmcremote.git/!svn/ver/3/trunk/src/org/xbmc/eventclient/PacketACTION.java
+END
+PacketPING.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/freezy/android-xbmcremote.git/!svn/ver/3/trunk/src/org/xbmc/eventclient/PacketPING.java
+END
+Packet.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/freezy/android-xbmcremote.git/!svn/ver/695/trunk/src/org/xbmc/eventclient/Packet.java
+END
+PacketBYE.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/freezy/android-xbmcremote.git/!svn/ver/3/trunk/src/org/xbmc/eventclient/PacketBYE.java
+END
+ButtonCodes.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/freezy/android-xbmcremote.git/!svn/ver/599/trunk/src/org/xbmc/eventclient/ButtonCodes.java
+END
+PacketLOG.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/freezy/android-xbmcremote.git/!svn/ver/3/trunk/src/org/xbmc/eventclient/PacketLOG.java
+END
+PacketNOTIFICATION.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/freezy/android-xbmcremote.git/!svn/ver/3/trunk/src/org/xbmc/eventclient/PacketNOTIFICATION.java
+END
+PacketHELO.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/freezy/android-xbmcremote.git/!svn/ver/3/trunk/src/org/xbmc/eventclient/PacketHELO.java
+END

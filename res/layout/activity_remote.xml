@@ -1,0 +1,114 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/remote_gesture_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/remote_up_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="remoteUp"
+                android:text="@string/up" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/remote_left_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="remoteLeft"
+                android:text="Left" />
+
+            <Button
+                android:id="@+id/remote_select_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="remoteSelect"
+                android:text="Select" />
+
+            <Button
+                android:id="@+id/remote_right_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="remoteRight"
+                android:text="Right" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/remote_down_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="remoteDown"
+                android:text="Down" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/remote_back_button"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="remoteBack"
+                android:text="back" />
+
+            <Button
+                android:id="@+id/remote_home_button"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="remoteHome"
+                android:text="home" />
+
+            <Button
+                android:id="@+id/remote_context_menu_button"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="remoteContextMenu"
+                android:text="menu" />
+
+            <Button
+                android:id="@+id/remote_info_button"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="remoteInfo"
+                android:text="info" />
+
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>

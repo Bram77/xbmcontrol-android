@@ -1,0 +1,12 @@
+<resources>
+
+    <string name="app_name">XBMControl</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_home">XBMControl</string>
+    <string name="title_activity_remote">Remote</string>
+    <string name="title_activity_source">SourceActivity</string>
+    <string name="title_global">XBMControl - %s</string>
+    <string name="title_activity_source_directory">SourceDirectoryActivity</string>
+    <string name="up">Up</string>
+
+</resources>
