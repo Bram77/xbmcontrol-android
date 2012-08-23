@@ -269,7 +269,7 @@ public abstract class Packet {
 	}
 	
 	/**
-	 * Helper Method to convert an integer to a Byte array
+	 * HelperMethods Method to convert an integer to a Byte array
 	 * @param value
 	 * @return Byte-Array
 	 */
@@ -282,7 +282,7 @@ public abstract class Packet {
 	}
 
 	/**
-	 * Helper Method to convert an short to a Byte array
+	 * HelperMethods Method to convert an short to a Byte array
 	 * @param value
 	 * @return Byte-Array
 	 */

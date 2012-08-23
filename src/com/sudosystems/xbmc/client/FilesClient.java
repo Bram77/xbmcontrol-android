@@ -1,6 +1,5 @@
 package com.sudosystems.xbmc.client;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

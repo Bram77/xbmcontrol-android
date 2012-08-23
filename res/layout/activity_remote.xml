@@ -8,7 +8,20 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:background="@drawable/black_striped_background" >
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TableRow
             android:id="@+id/tableRow1"
@@ -18,9 +31,15 @@
 
             <Button
                 android:id="@+id/remote_up_button"
+                style="@style/ButtonTextNegative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_negative"
                 android:onClick="remoteUp"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
                 android:text="@string/up" />
 
         </TableRow>
@@ -33,23 +52,41 @@
 
             <Button
                 android:id="@+id/remote_left_button"
+                style="@style/ButtonTextNegative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_negative"
                 android:onClick="remoteLeft"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
                 android:text="Left" />
 
             <Button
                 android:id="@+id/remote_select_button"
+                style="@style/ButtonTextPositve"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
                 android:onClick="remoteSelect"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
                 android:text="Select" />
 
             <Button
                 android:id="@+id/remote_right_button"
+                style="@style/ButtonTextNegative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_negative"
                 android:onClick="remoteRight"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
                 android:text="Right" />
 
         </TableRow>
@@ -62,9 +99,15 @@
 
             <Button
                 android:id="@+id/remote_down_button"
+                style="@style/ButtonTextNegative"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_negative"
                 android:onClick="remoteDown"
+                android:paddingBottom="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="20dp"
                 android:text="Down" />
 
         </TableRow>
@@ -78,37 +121,58 @@
 
             <Button
                 android:id="@+id/remote_back_button"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
+                style="@style/ButtonTextPositve"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
                 android:onClick="remoteBack"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
                 android:text="back" />
 
             <Button
-                android:id="@+id/remote_home_button"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="remoteHome"
-                android:text="home" />
-
-            <Button
                 android:id="@+id/remote_context_menu_button"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
+                style="@style/ButtonTextPositve"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
                 android:onClick="remoteContextMenu"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
                 android:text="menu" />
 
             <Button
                 android:id="@+id/remote_info_button"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="match_parent"
+                style="@style/ButtonTextPositve"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
                 android:onClick="remoteInfo"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
                 android:text="info" />
 
+            <Button
+                android:id="@+id/remote_home_button"
+                style="@style/ButtonTextPositve"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
+                android:onClick="remoteHome"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="5dp"
+                android:text="home" />
+
         </TableRow>
+
     </TableLayout>
 
 </RelativeLayout>

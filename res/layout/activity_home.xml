@@ -1,45 +1,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/black_striped_background" >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TableLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical" >
+        android:layout_alignParentBottom="true" >
 
-        <Button
-            android:id="@+id/home_music_button"
-            android:layout_width="match_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:onClick="openAudioIntent"
-            android:text="Music" />
+            android:layout_gravity="bottom"
+            android:gravity="bottom" >
 
-        <Button
-            android:id="@+id/home_video_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="openVideoIntent"
-            android:text="Video" />
+            <Button
+                android:id="@+id/home_music_button"
+                style="@style/ButtonTextPositve"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
+                android:onClick="openAudioIntent"
+                android:paddingBottom="15dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:text="Music" />
 
-        <Button
-            android:id="@+id/home_pictures_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="openPicturesIntent"
-            android:text="Pictures" />
+            <Button
+                android:id="@+id/home_video_button"
+                style="@style/ButtonTextPositve"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
+                android:onClick="openVideoIntent"
+                android:paddingBottom="15dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:text="Video" />
 
-        <Button
-            android:id="@+id/home_remote_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="openRemoteIntent"
-            android:text="Remote" />
+            <Button
+                android:id="@+id/home_pictures_button"
+                style="@style/ButtonTextPositve"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
+                android:onClick="openPicturesIntent"
+                android:paddingBottom="15dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:text="Pictures" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/home_remote_button"
+                style="@style/ButtonTextPositve"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_shape_positive"
+                android:onClick="openRemoteIntent"
+                android:paddingBottom="15dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:text="Remote" />
+
+        </TableRow>
+    </TableLayout>
 
 </RelativeLayout>
