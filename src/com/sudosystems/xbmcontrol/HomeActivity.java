@@ -1,58 +1,27 @@
 package com.sudosystems.xbmcontrol;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.support.v4.app.NavUtils;
 
-import com.sudosystems.xbmc.client.XbmcClient;
+import com.sudosystems.xbmcontrol.controllers.HomeController;
+import com.sudosystems.xbmcontrol.services.NowPlayingService;
 import com.sudosystems.xbmc.client.FilesClient.MediaType;
 
 public class HomeActivity extends Activity 
 {
-    private SharedPreferences nowPlayingData;
+    private HomeController cHome;
     
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        startService(new Intent(this, NowPlayingService.class));
+        cHome = new HomeController(this);
+        cHome.displayNowPlayingInfo();
         
-        Context context     = getApplicationContext();
-        nowPlayingData      = context.getSharedPreferences("NowPlaying", Context.MODE_PRIVATE);
-
-        ScheduledExecutorService scheduleTaskExecutor   = Executors.newScheduledThreadPool(5);
-
-        scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() 
-        {
-            public void run() 
-            {
-                if(nowPlayingData.getBoolean("is_playing", false))
-                {
-                    Log.v("NOW_PLAYING", nowPlayingData.getString("media_data_json", "nothing"));
-                }
-            }
-        }, 0, 15, TimeUnit.SECONDS);
-
+        startService(new Intent(this, NowPlayingService.class));
     }
     
     @Override

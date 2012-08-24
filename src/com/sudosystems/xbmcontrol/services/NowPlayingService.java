@@ -1,4 +1,4 @@
-package com.sudosystems.xbmcontrol;
+package com.sudosystems.xbmcontrol.services;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -16,7 +16,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class NowPlayingService extends Service
@@ -29,6 +28,7 @@ public class NowPlayingService extends Service
     @Override
     public void onCreate()
     {
+        xbmc                = new XbmcClient(this);
         Context context     = getApplicationContext();
         preferences         = context.getSharedPreferences("NowPlaying", Context.MODE_PRIVATE);
         preferencesEditor   = preferences.edit();
@@ -37,8 +37,7 @@ public class NowPlayingService extends Service
     @Override
     public void onStart(Intent intent, int startId) 
     {
-        xbmc                                            = new XbmcClient(this);
-        ScheduledExecutorService scheduleTaskExecutor   = Executors.newScheduledThreadPool(5);
+        ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 
         scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() 
         {
@@ -54,9 +53,9 @@ public class NowPlayingService extends Service
         xbmc.Player.getActivePlayers(new JsonHttpResponseHandler()
         {
             @Override
-            public void onSuccess(JSONObject activePlayersData)
+            public void onSuccess(JSONObject response)
             {
-                JSONArray result = activePlayersData.optJSONArray("result");
+                JSONArray result = response.optJSONArray("result");
                 
                 if(result != null && result.length() > 0)
                 {
@@ -111,14 +110,26 @@ public class NowPlayingService extends Service
                 return;
             }
         }
+        
+        @Override
+        public void onFailure(Throwable e, String response) 
+        {
+            Log.v("NowPlayingService::itemHandler", e.getMessage());
+        }
     };
     
     private JsonHttpResponseHandler itemDetailsHandler = new JsonHttpResponseHandler()
     {
         @Override
-        public void onSuccess(JSONObject songLibraryData)
+        public void onSuccess(JSONObject response)
         {
-            Log.v("LIBRARY_DATA", songLibraryData.toString());
+            Log.v("LIBRARY_DATA", response.toString());
+        }
+        
+        @Override
+        public void onFailure(Throwable e, String response) 
+        {
+            Log.v("NowPlayingService::itemDetailsHandler", e.getMessage());
         }
     };
     
@@ -135,7 +146,7 @@ public class NowPlayingService extends Service
     {
         preferencesEditor.putString("playing_item_json", nowPlayingData.toString());
         preferencesEditor.commit();
-        //Log.v("NOW_PLAYING", nowPlayingData.toString());
+        Log.v("NOW_PLAYING", nowPlayingData.toString());
     }
 
     @Override

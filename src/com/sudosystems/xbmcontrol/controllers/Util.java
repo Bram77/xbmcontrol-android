@@ -1,11 +1,11 @@
-package com.sudosystems.xbmc.client;
+package com.sudosystems.xbmcontrol.controllers;
 
-public class HelperMethods
+public class Util
 {
-    public HelperMethods()
+    public Util()
     {}
     
-    public String getOneDirectoryUp(String psCurrentPath)
+    public static String getOneDirectoryUp(String psCurrentPath)
     {
         String lsWithoutTrailingSlash = psCurrentPath.substring(0, psCurrentPath.lastIndexOf('/'));
         return psCurrentPath.substring(0, lsWithoutTrailingSlash.lastIndexOf('/'))+"/";

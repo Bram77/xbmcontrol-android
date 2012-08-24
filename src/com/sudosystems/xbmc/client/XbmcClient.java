@@ -7,7 +7,6 @@ public class XbmcClient
     public SystemClient System;
     public FilesClient Files;
     public PlayerClient Player;
-    public HelperMethods Helper;
     public AudioLibraryClient AudioLibrary;
     public VideoLibraryClient VideoLibrary;
     public PlaylistClient Playlist;
@@ -15,7 +14,6 @@ public class XbmcClient
     
     public XbmcClient(Context context)
     {
-        Helper          = new HelperMethods();
         System          = new SystemClient(context);
         Files           = new FilesClient(context);
         Player          = new PlayerClient(context);

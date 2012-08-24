@@ -1,6 +1,7 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/DefaultDirectoryRow"
-    android:background="@drawable/clickable_table_row" >
+    android:background="@drawable/clickable_table_row"
+    android:onClick="displayDirectoryContent" >
 
     <ImageView
         style="@style/DefaultDirectoryRowIcon"
