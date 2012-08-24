@@ -16,30 +16,23 @@ public class JsonRpcClient
     private static final String AUTH_PASSWORD       = "11983bvoo";
     private static final String CONTENT_TYPE        = "application/json";
     private static final String JSONRPC_VERSION     = "2.0";
-    private static final Integer CONNECTION_TIMEOUT = 5000;
-    private static AsyncHttpClient iClient           = new AsyncHttpClient();
+    private static final Integer CONNECTION_TIMEOUT = 30000;
+    private static AsyncHttpClient iClient;
     private Context iContext;
     
     public JsonRpcClient(Context context)
     {
         iContext            = context;
-        String basicAuth    = "";
+        iClient             = new AsyncHttpClient();
         iClient.addHeader("Accept", CONTENT_TYPE);
         iClient.addHeader("Content-Type", CONTENT_TYPE);
         iClient.setTimeout(CONNECTION_TIMEOUT);
         iClient.setBasicAuth(AUTH_USERNAME, AUTH_PASSWORD);
-
-        try
-        {
-            basicAuth = android.util.Base64.encodeToString((AUTH_USERNAME + ":" + AUTH_PASSWORD).getBytes("UTF-8"), android.util.Base64.NO_WRAP);
-        }
-        catch(UnsupportedEncodingException e2)
-        {
-            Log.v("JsonRpcClient", e2.getMessage());
-            e2.printStackTrace();
-        }
-        
-        iClient.addHeader("Authorization", "Basic " +basicAuth);
+    }
+    
+    public void cancelRequest()
+    {
+        iClient.cancelRequests(iContext, true);
     }
     
     public void post(String method, JSONObject params, JsonHttpResponseHandler responseHandler)
@@ -59,7 +52,6 @@ public class JsonRpcClient
             oRawPostParams = null;
         } 
         
-        //iClient.cancelRequests(iContext, true);
         iClient.post(iContext, BASE_URL, oRawPostParams, CONTENT_TYPE, responseHandler);
     }
     

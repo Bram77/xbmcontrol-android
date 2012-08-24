@@ -68,6 +68,14 @@ public class HomeActivity extends Activity
         getMenuInflater().inflate(R.menu.activity_home, menu);
         return true;
     }
+    
+    @Override
+    public void onBackPressed() 
+    {
+        super.onBackPressed();
+        getIntent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        this.finish();
+    }
 
     public void openAudioIntent(View view)
     {
@@ -75,7 +83,8 @@ public class HomeActivity extends Activity
         intent.putExtra("MEDIA_TYPE", MediaType.AUDIO);
         intent.putExtra("ACTIVITY_TITLE", "Music");
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent); 
+        this.startActivity(intent);
+        this.finish();
     }
     
     public void openVideoIntent(View view)
@@ -85,6 +94,7 @@ public class HomeActivity extends Activity
         intent.putExtra("ACTIVITY_TITLE", "Video");
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
+        this.finish();
     }
     
     public void openPicturesIntent(View view)
@@ -94,6 +104,7 @@ public class HomeActivity extends Activity
         intent.putExtra("ACTIVITY_TITLE", "Pictures");
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
+        this.finish();
     }
     
     public void openRemoteIntent(View view)
@@ -101,5 +112,6 @@ public class HomeActivity extends Activity
         Intent intent = new Intent(this, RemoteActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
+        this.finish();
     }
 }

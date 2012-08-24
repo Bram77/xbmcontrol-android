@@ -67,7 +67,7 @@ public class NowPlayingService extends Service
                     preferencesEditor.putString("player_type", activePlayer.optString("type"));
                     preferencesEditor.commit();
                     
-                    getNowPlayingItemData(activePlayer.optInt("playerid"), activePlayer.optString("type"));
+                    xbmc.Player.getNowPlayingItem(activePlayer.optInt("playerid"), itemHandler);
                     
                     return;
                 }
@@ -82,25 +82,45 @@ public class NowPlayingService extends Service
             }
         });
     }
-    
-    private void getNowPlayingItemData(int playerId, String mediaType)
+
+    private JsonHttpResponseHandler itemHandler = new JsonHttpResponseHandler()
     {
-        xbmc.Player.getNowPlayingItem(playerId, new JsonHttpResponseHandler()
+        @Override
+        public void onSuccess(JSONObject nowPlayingData)
         {
-            @Override
-            public void onSuccess(JSONObject nowPlayingData)
+            JSONObject mediaData = nowPlayingData.optJSONObject("result");
+            
+            if(mediaData != null)
             {
-                JSONObject mediaData = nowPlayingData.optJSONObject("result");
+                JSONObject nowPlayingItem = mediaData.optJSONObject("item");
+                storeItemData(nowPlayingItem);
                 
-                if(mediaData != null)
+                if(nowPlayingItem.optString("type").equals("song"))
                 {
-                    storeData(mediaData.optJSONObject("item"));
-                    
-                    return;
+                    xbmc.AudioLibrary.getSongDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
                 }
+                else if(nowPlayingItem.optString("type").equals("movie"))
+                {
+                    xbmc.VideoLibrary.getMovieDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
+                }
+                else if(nowPlayingItem.optString("type").equals("episode"))
+                {
+                    xbmc.VideoLibrary.getEpisodeDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
+                }
+                
+                return;
             }
-        });
-    }
+        }
+    };
+    
+    private JsonHttpResponseHandler itemDetailsHandler = new JsonHttpResponseHandler()
+    {
+        @Override
+        public void onSuccess(JSONObject songLibraryData)
+        {
+            Log.v("LIBRARY_DATA", songLibraryData.toString());
+        }
+    };
     
     private void resetData()
     {
@@ -111,9 +131,9 @@ public class NowPlayingService extends Service
         preferencesEditor.commit();
     }
     
-    private void storeData(JSONObject nowPlayingData)
+    private void storeItemData(JSONObject nowPlayingData)
     {
-        preferencesEditor.putString("media_data_json", nowPlayingData.toString());
+        preferencesEditor.putString("playing_item_json", nowPlayingData.toString());
         preferencesEditor.commit();
         //Log.v("NOW_PLAYING", nowPlayingData.toString());
     }

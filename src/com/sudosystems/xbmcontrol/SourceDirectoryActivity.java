@@ -12,11 +12,16 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -27,8 +32,9 @@ import android.support.v4.app.NavUtils;
 public class SourceDirectoryActivity extends Activity 
 {
     private XbmcClient xbmc;
-    private TableRow ioDirectoryUpRow = null;
+    private TableRow ioDirectoryUpRow       = null;
     private ProgressDialog loadingDialog;
+    private TableRow contextMenuSourceRow   = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -38,9 +44,22 @@ public class SourceDirectoryActivity extends Activity
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         
         xbmc = new XbmcClient(this);
-        
+
         setTitle(getResources().getString(R.string.title_global, getIntent().getExtras().getString("ACTIVITY_TITLE"), getIntent().getExtras().getString("ACTIVITY_TITLE").length()));
         showDirectoryContent();
+    }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View sourceRow, ContextMenuInfo menuInfo) 
+    {
+      super.onCreateContextMenu(menu, sourceRow, menuInfo);
+      
+      contextMenuSourceRow =  (TableRow) sourceRow;
+      TextView sourceTitle  = (TextView) ((ViewGroup) sourceRow).getChildAt(1);
+      menu.setHeaderTitle("Directory '" +sourceTitle.getText()+ "'");
+      MenuInflater inflater = getMenuInflater();
+
+      inflater.inflate(R.menu.source_directory_context_menu, menu);
     }
 
     @Override
@@ -173,7 +192,7 @@ public class SourceDirectoryActivity extends Activity
 
                 if(result != null)
                 {
-                    JSONArray files = result.optJSONArray("files");
+                    final JSONArray files = result.optJSONArray("files");
                     
                     if(files == null || files.length() == 0)
                     {
@@ -187,8 +206,9 @@ public class SourceDirectoryActivity extends Activity
 
                     for(int i=0; i < files.length(); i++)
                     {
-                        final boolean isDirectory = (files.optJSONObject(i).optString("filetype", "").equals("directory"));
-                        final String fileType       = files.optJSONObject(i).optString("type", "");
+                        final int index            = i;
+                        final boolean isDirectory  = (files.optJSONObject(index).optString("filetype", "").equals("directory"));
+                        final String fileType       = files.optJSONObject(index).optString("type", "");
                         TableRow sourceRow          = (isDirectory)? (TableRow) getLayoutInflater().inflate(R.layout.directory_template, null) : (TableRow) getLayoutInflater().inflate(R.layout.file_template, null);
                         ImageView rowIcon           = (ImageView) sourceRow.getChildAt(0);
                         
@@ -202,24 +222,26 @@ public class SourceDirectoryActivity extends Activity
                                 {
                                     showDirectoryContent(view);
                                 }
-                                else if(fileType == "song")
+                                else
                                 {
-                                    
+                                    playFile(files.optJSONObject(index), index);
                                 }
                             }   
                         });
                         
+                        sourceRow.setOnCreateContextMenuListener(SourceDirectoryActivity.this);
+                        
                         TextView sourceTitle = (TextView) sourceRow.getChildAt(1);
-                        sourceTitle.setText(files.optJSONObject(i).optString("label", "No label specified"));
+                        sourceTitle.setText(files.optJSONObject(index).optString("label", "No label specified"));
                         
                         TextView sourcePath = (TextView) sourceRow.getChildAt(2);
-                        sourcePath.setText(files.optJSONObject(i).optString("file", ""));
+                        sourcePath.setText(files.optJSONObject(index).optString("file", ""));
                         
                         sourcesTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
                     }
                 }
                 
-                Log.v("RESULT", response.toString());
+                //Log.v("RESULT", response.toString());
             }
             
             @Override
@@ -236,14 +258,120 @@ public class SourceDirectoryActivity extends Activity
         });
     }
     
+    private void playFile(final JSONObject fileData, int itemIndex)
+    {
+        playDirectory(fileData, itemIndex);
+    }
+
+    public void playDirectory(MenuItem item, final JSONObject fileData, final int itemIndex)
+    {
+        String path;
+        final String title;
+        
+        if(fileData == null)
+        {
+            final TextView sourceTitle = (TextView) contextMenuSourceRow.getChildAt(1);
+            title                       = sourceTitle.getText().toString();
+            TextView sourcePath         = (TextView) contextMenuSourceRow.getChildAt(2);
+            path                        = sourcePath.getText().toString();
+        }
+        else
+        {
+            title   = fileData.optString("label", "");
+            path    = getIntent().getExtras().getString("CURRENT_PATH");
+        }
+
+        xbmc.Playlist.addDirectory(
+                getIntent().getExtras().getString("MEDIA_TYPE"), 
+                path, 
+                true, 
+                new JsonHttpResponseHandler()
+        {
+            @Override
+            public void onStart()
+            {
+                loadingDialog = ProgressDialog.show(SourceDirectoryActivity.this, "", "Starting playback...", true);
+            }
+            
+            @Override
+            public void onSuccess(JSONObject response)
+            {
+                String addDirectoryResult = response.optString("result");
+
+                if(addDirectoryResult != null && addDirectoryResult.equals("OK"))
+                {
+                    xbmc.Player.playPlaylist(getIntent().getExtras().getString("MEDIA_TYPE"), itemIndex, new JsonHttpResponseHandler()
+                    {
+                        @Override
+                        public void onSuccess(JSONObject playPlaylistResponse)
+                        {
+                            final String playPlaylistResult= playPlaylistResponse.optString("result");
+                            
+                            if(playPlaylistResult != null && playPlaylistResult.equals("OK"))
+                            {
+                                Toast.makeText(SourceDirectoryActivity.this, "Playback of '" +title+ "' started", Toast.LENGTH_LONG).show();
+                            }
+                            else
+                            {
+                                Toast.makeText(SourceDirectoryActivity.this, "ERROR: Playback of '" +title+ "' could not be started", Toast.LENGTH_LONG).show();
+                                Log.v("PLAYBACK ERROR", playPlaylistResponse.toString());
+                            }
+                        }
+                        
+                        @Override
+                        public void onFailure(Throwable e, String response) 
+                        {
+                            Toast.makeText(SourceDirectoryActivity.this, "ERROR: Playback of '" +title+ "' could not be started", Toast.LENGTH_LONG).show();
+                            Log.v("PLAYBACK ERROR", response);
+                        }
+                    });
+                }
+                else
+                {
+                    Toast.makeText(SourceDirectoryActivity.this, "ERROR: '" +title+ "' could not be added to playlist", Toast.LENGTH_LONG).show();
+                    Log.v("ADD PLAYLIST ERROR", response.toString());
+                }
+                
+            }
+            
+            @Override
+            public void onFailure(Throwable e, String response) 
+            {
+                Toast.makeText(SourceDirectoryActivity.this, "ERROR: '" +title+ "' could not be added to playlist", Toast.LENGTH_LONG).show();
+                Log.v("ADD PLAYLIST ERROR", response.toString());
+            }
+
+            @Override
+            public void onFinish()
+            {
+                loadingDialog.cancel();
+            }
+        });
+    }
+    
+    public void playDirectory(MenuItem item)
+    {
+        playDirectory(item, null, 0);
+    }
+    
+    public void playDirectory(final JSONObject fileData, int itemIndex)
+    {
+        playDirectory(null, fileData, itemIndex);
+    }
+    
+    public void enqueDirectory(MenuItem menuItem)
+    {
+        
+    }
+    
     public void openSource()
     {
-        Intent intent = new Intent(SourceDirectoryActivity.this, SourceActivity.class);
+        Intent intent = new Intent(this, SourceActivity.class);
         intent.putExtra("MEDIA_TYPE", getIntent().getExtras().getString("MEDIA_TYPE"));
         intent.putExtra("ACTIVITY_TITLE", getIntent().getExtras().getString("ACTIVITY_TITLE"));
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        SourceDirectoryActivity.this.startActivity(intent);
-        SourceDirectoryActivity.this.finish();
+        this.startActivity(intent);
+        this.finish();
     }
     
     public void showDirectoryContent(View view, String psSourcePath)
@@ -274,14 +402,15 @@ public class SourceDirectoryActivity extends Activity
             return;
         }
         
-        Intent intent = new Intent(SourceDirectoryActivity.this, SourceDirectoryActivity.class);
+        Intent intent = new Intent(this, SourceDirectoryActivity.class);
         intent.putExtra("MEDIA_TYPE", getIntent().getExtras().getString("MEDIA_TYPE"));
         intent.putExtra("IS_ROOT", false);
         intent.putExtra("ROOT_PATH", getIntent().getExtras().getString("ROOT_PATH"));
         intent.putExtra("CURRENT_PATH", lsSourcePath);
         intent.putExtra("ACTIVITY_TITLE", getIntent().getExtras().getString("ACTIVITY_TITLE"));
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        SourceDirectoryActivity.this.startActivity(intent); 
+        this.startActivity(intent);
+        this.finish();
     }
     
     public void showDirectoryContent(View view)

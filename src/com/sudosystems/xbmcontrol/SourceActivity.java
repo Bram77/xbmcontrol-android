@@ -163,12 +163,13 @@ public class SourceActivity extends Activity
     {
         TableRow row        = (TableRow)view;
         TextView sourcePath = (TextView) row.getChildAt(2);
-        Intent intent       = new Intent(SourceActivity.this, SourceDirectoryActivity.class);
+        Intent intent       = new Intent(this, SourceDirectoryActivity.class);
         intent.putExtra("MEDIA_TYPE", getIntent().getExtras().getString("MEDIA_TYPE"));
         intent.putExtra("ROOT_PATH", sourcePath.getText().toString());
         intent.putExtra("CURRENT_PATH", sourcePath.getText().toString());
         intent.putExtra("ACTIVITY_TITLE", getIntent().getExtras().getString("ACTIVITY_TITLE"));
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        SourceActivity.this.startActivity(intent); 
+        this.startActivity(intent);
+        this.finish();
     }
 }

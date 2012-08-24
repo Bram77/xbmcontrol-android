@@ -1,0 +1,4 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/playSourceDirectory" android:title="Play" android:onClick="playDirectory" android:titleCondensed="PLAY_ID"></item>
+    <item android:id="@+id/enqueSourceDirectory" android:title="Enque" android:onClick="enqueDirectory" android:titleCondensed="ENQUE_ID"></item>
+</menu>
