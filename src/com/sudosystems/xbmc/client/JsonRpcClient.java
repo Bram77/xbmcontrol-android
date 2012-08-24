@@ -59,7 +59,7 @@ public class JsonRpcClient
             oRawPostParams = null;
         } 
         
-        iClient.cancelRequests(iContext, true);
+        //iClient.cancelRequests(iContext, true);
         iClient.post(iContext, BASE_URL, oRawPostParams, CONTENT_TYPE, responseHandler);
     }
     

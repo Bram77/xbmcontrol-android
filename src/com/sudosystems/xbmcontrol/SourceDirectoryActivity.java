@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -140,7 +139,7 @@ public class SourceDirectoryActivity extends Activity
             {
                 rowIcon.setImageResource(R.drawable.folder_pictures_64);
             }
-            else if(currentMediaType.equals("picture"))
+            else
             {
                 rowIcon.setImageResource(R.drawable.file_image_64);
             }
