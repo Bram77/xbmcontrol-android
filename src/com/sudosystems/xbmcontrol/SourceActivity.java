@@ -5,6 +5,7 @@ import com.sudosystems.xbmcontrol.controllers.SourceController;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +51,13 @@ public class SourceActivity extends Activity
         }
         
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event)
+    {
+        boolean isVolumeKey = (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP);
+        return (isVolumeKey)? cSource.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
     }
 
     @Override

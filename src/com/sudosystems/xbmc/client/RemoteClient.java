@@ -69,6 +69,16 @@ public class RemoteClient extends AsyncTask<Object, Object, Object>
     {
         eventClient.sendButton("R1", ButtonCodes.REMOTE_MENU, false, true, true, (short)0, (byte)0);
     }
+    
+    public void volumeUp()
+    {
+        eventClient.sendButton("R1", ButtonCodes.REMOTE_VOLUME_PLUS, false, true, true, (short)0, (byte)0);
+    }
+    
+    public void volumeDown()
+    {
+        eventClient.sendButton("R1", ButtonCodes.REMOTE_VOLUME_MINUS, false, true, true, (short)0, (byte)0);
+    }
 
     @Override
     protected Object doInBackground(Object... params)

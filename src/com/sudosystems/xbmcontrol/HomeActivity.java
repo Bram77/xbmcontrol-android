@@ -3,12 +3,13 @@ package com.sudosystems.xbmcontrol;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 
 import com.sudosystems.xbmcontrol.controllers.HomeController;
 import com.sudosystems.xbmcontrol.services.NowPlayingService;
-import com.sudosystems.xbmc.client.FilesClient.MediaType;
 
 public class HomeActivity extends Activity 
 {
@@ -39,6 +40,13 @@ public class HomeActivity extends Activity
     }
     
     @Override
+    public boolean dispatchKeyEvent(KeyEvent event)
+    {
+        boolean isVolumeKey = (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP);
+        return (isVolumeKey)? cHome.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
+    }
+    
+    @Override
     public void onBackPressed() 
     {
         super.onBackPressed();
@@ -48,39 +56,21 @@ public class HomeActivity extends Activity
 
     public void openAudioIntent(View view)
     {
-        Intent intent = new Intent(this, SourceActivity.class);
-        intent.putExtra("MEDIA_TYPE", MediaType.AUDIO);
-        intent.putExtra("ACTIVITY_TITLE", "Music");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
-        this.finish();
+        cHome.openAudioIntent();
     }
     
     public void openVideoIntent(View view)
     {
-        Intent intent = new Intent(this, SourceActivity.class);
-        intent.putExtra("MEDIA_TYPE", MediaType.VIDEO);
-        intent.putExtra("ACTIVITY_TITLE", "Video");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
-        this.finish();
+        cHome.openVideoIntent();
     }
     
     public void openPicturesIntent(View view)
     {
-        Intent intent = new Intent(this, SourceActivity.class);
-        intent.putExtra("MEDIA_TYPE", MediaType.PICTURES);
-        intent.putExtra("ACTIVITY_TITLE", "Pictures");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
-        this.finish();
+        cHome.openPicturesIntent();
     }
     
     public void openRemoteIntent(View view)
     {
-        Intent intent = new Intent(this, RemoteActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
-        this.finish();
+        cHome.openRemoteIntent();
     }
 }

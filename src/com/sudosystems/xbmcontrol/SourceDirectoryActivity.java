@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,7 +54,6 @@ public class SourceDirectoryActivity extends Activity
         return true;
     }
 
-    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
     {
@@ -65,6 +65,13 @@ public class SourceDirectoryActivity extends Activity
         }
         
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event)
+    {
+        boolean isVolumeKey = (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP);
+        return (isVolumeKey)? cSourceDirectory.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
     }
 
     @Override
@@ -78,6 +85,11 @@ public class SourceDirectoryActivity extends Activity
     public void onBackPressed() 
     {
         cSourceDirectory.showDirectoryUpIntent();
+    }
+    
+    public void playDirectory(MenuItem item)
+    {
+        cSourceDirectory.playDirectory(item, null, 0);
     }
 
     public void enqueDirectory(MenuItem menuItem)

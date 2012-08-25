@@ -4,6 +4,7 @@ import com.sudosystems.xbmc.client.RemoteClient;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,7 +33,6 @@ public class RemoteActivity extends Activity
         getMenuInflater().inflate(R.menu.activity_remote, menu);
         return true;
     }
-
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 

@@ -52,42 +52,4 @@ public class HomeController extends GlobalController
     {
         scheduleTaskExecutor.shutdown();
     }
-    
-    public void openAudioIntent(View view)
-    {
-        Intent intent = new Intent(iContext, SourceActivity.class);
-        intent.putExtra("MEDIA_TYPE", MediaType.AUDIO);
-        intent.putExtra("ACTIVITY_TITLE", "Music");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        iActivity.startActivity(intent);
-        iActivity.finish();
-    }
-    
-    public void openVideoIntent(View view)
-    {
-        Intent intent = new Intent(iContext, SourceActivity.class);
-        intent.putExtra("MEDIA_TYPE", MediaType.VIDEO);
-        intent.putExtra("ACTIVITY_TITLE", "Video");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        iActivity.startActivity(intent);
-        iActivity.finish();
-    }
-    
-    public void openPicturesIntent(View view)
-    {
-        Intent intent = new Intent(iContext, SourceActivity.class);
-        intent.putExtra("MEDIA_TYPE", MediaType.PICTURES);
-        intent.putExtra("ACTIVITY_TITLE", "Pictures");
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        iActivity.startActivity(intent);
-        iActivity.finish();
-    }
-    
-    public void openRemoteIntent(View view)
-    {
-        Intent intent = new Intent(iContext, RemoteActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        iActivity.startActivity(intent);
-        iActivity.finish();
-    }
 }

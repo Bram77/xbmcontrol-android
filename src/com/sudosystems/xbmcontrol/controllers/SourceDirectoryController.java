@@ -68,7 +68,7 @@ public class SourceDirectoryController extends GlobalController
             @Override
             public void onSuccess(JSONObject response)
             {
-                handleResponse(response);
+                handleDisplayDirectoryResponse(response);
             }
             
             @Override
@@ -86,7 +86,7 @@ public class SourceDirectoryController extends GlobalController
         });
     }
     
-    private void handleResponse(JSONObject response)
+    private void handleDisplayDirectoryResponse(JSONObject response)
     {
         JSONObject loError = response.optJSONObject("error");
 
@@ -292,12 +292,7 @@ public class SourceDirectoryController extends GlobalController
             }
         });
     }
-    
-    public void playDirectory(MenuItem item)
-    {
-        playDirectory(item, null, 0);
-    }
-    
+
     public void playDirectory(final JSONObject fileData, int itemIndex)
     {
         playDirectory(null, fileData, itemIndex);
