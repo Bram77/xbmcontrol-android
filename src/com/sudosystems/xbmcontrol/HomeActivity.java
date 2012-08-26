@@ -27,15 +27,15 @@ public class HomeActivity extends Activity
             return;
         }
         
-        cHome.displayNowPlayingInfo();
-        startService(new Intent(this, NowPlayingService.class));
+        //cHome.displayNowPlayingInfo();
+        //startService(new Intent(this, NowPlayingService.class));
     }
     
     @Override
     public void onStop() 
     {
         super.onStop();
-        stopService(new Intent(this, NowPlayingService.class));
+        //stopService(new Intent(this, NowPlayingService.class));
     }
 
     @Override

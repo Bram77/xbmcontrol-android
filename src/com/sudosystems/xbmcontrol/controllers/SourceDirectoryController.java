@@ -4,15 +4,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.sudosystems.xbmc.client.XbmcClient;
 import com.sudosystems.xbmcontrol.R;
-import com.sudosystems.xbmcontrol.SourceDirectoryActivity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,23 +19,16 @@ import android.widget.TextView;
 
 public class SourceDirectoryController extends GlobalController
 {
-    private XbmcClient iXbmc;
-    private Activity iActivity;
     private Bundle iActivityParams;
-    private Context iContext;
     private SourceDirectoryController self;
     private TableRow iContextMenuRow    = null;
     private TableRow ioDirectoryUpRow   = null;
-    private ConfigurationController configuration;
     
     public SourceDirectoryController(Context context, Bundle activityParams)
     {
         super(context);
         self            = this;
-        iContext        = context;
-        iActivity       = (Activity) context;
         iActivityParams = activityParams;
-        iXbmc           = new XbmcClient(context, configuration.getConnectionData());
     }
     
     public void setContextMenuRow(TableRow sourceRow)
@@ -93,13 +81,13 @@ public class SourceDirectoryController extends GlobalController
 
         if(loError != null)
         {
-            self.notify("ERROR: Source is not accessable");
-            openSourceDirectoryIntent(Util.getOneDirectoryUp(iActivityParams.getString("CURRENT_PATH")));
+            self.notify("ERROR: Source not accessable");
+            openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), Util.getOneDirectoryUp(iActivityParams.getString("CURRENT_PATH")));
             return;
         }
         
         JSONObject result = response.optJSONObject("result");
-
+ 
         if(result == null)
         {
             return;
@@ -110,12 +98,10 @@ public class SourceDirectoryController extends GlobalController
         if(files == null || files.length() == 0)
         {
             self.notify("ERROR: No " +iActivityParams.getString("MEDIA_TYPE")+ " files found");
-            openSourceDirectoryIntent(Util.getOneDirectoryUp(iActivityParams.getString("CURRENT_PATH")));
+            openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), Util.getOneDirectoryUp(iActivityParams.getString("CURRENT_PATH")));
             return;
         }
-        
-        Log.v("RESULT", files.toString());
-        
+
         TableLayout sourcesTable = (TableLayout) iActivity.findViewById(R.id.table_source_directory);
         addDirectoryUpRow(sourcesTable);
 
@@ -133,7 +119,7 @@ public class SourceDirectoryController extends GlobalController
                 {
                     if(isDirectory)
                     {
-                        openSourceDirectoryIntent(view);
+                        openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), view);
                     }
                     else
                     {
@@ -168,7 +154,7 @@ public class SourceDirectoryController extends GlobalController
         {
             public void onClick(View view) 
             {
-                openSourceDirectoryIntent(view);
+                openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), view);
             }   
         });
         
@@ -183,57 +169,7 @@ public class SourceDirectoryController extends GlobalController
         
         sourcesTable.addView(ioDirectoryUpRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
-    
-    public void openSourceDirectoryIntent(String mediaType, String rootPath, String targetPath, String title)
-    {
-        String[] aTargetPath    = targetPath.split("/");
-        String lTitle           = aTargetPath[(aTargetPath.length-1)];
-        
-        Intent intent = new Intent(iContext, SourceDirectoryActivity.class);
-        intent.putExtra("MEDIA_TYPE", mediaType);
-        intent.putExtra("ROOT_PATH", rootPath);
-        intent.putExtra("CURRENT_PATH", targetPath);
-        intent.putExtra("ACTIVITY_TITLE", lTitle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        iActivity.startActivity(intent);
-        iActivity.finish();
-    }
-
-    public void openSourceDirectoryIntent(View view, String psSourcePath)
-    {
-        String targetPath = "";
-        
-        if(view != null)
-        {
-            TableRow row            = (TableRow)view;
-            TextView loSourcePath   = (TextView) row.getChildAt(2);
-            targetPath              = loSourcePath.getText().toString();
-        }
-        else if(psSourcePath != null)
-        {
-            targetPath = psSourcePath;
-        }
-        
-        //TODO: Find more elegant way to check if trying to go below root
-        if(targetPath.length() < iActivityParams.getString("ROOT_PATH").length())
-        {
-            openSourceIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ACTIVITY_TITLE"));
-            return;
-        }
-        
-        openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), targetPath, iActivityParams.getString("ACTIVITY_TITLE"));
-    }
-
-    public void openSourceDirectoryIntent(String psSourcePath)
-    {
-        openSourceDirectoryIntent(null, psSourcePath);
-    }
-    
-    public void openSourceDirectoryIntent(View view)
-    {
-        openSourceDirectoryIntent(view, null);
-    }
-    
+ 
     public void playFile(final JSONObject fileData)
     {
         iXbmc.Player.playFile(fileData.optString("file"), new JsonHttpResponseHandler()

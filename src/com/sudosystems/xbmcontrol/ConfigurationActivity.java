@@ -4,6 +4,7 @@ import com.sudosystems.xbmcontrol.controllers.ConfigurationController;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,10 +12,8 @@ import android.support.v4.app.NavUtils;
 
 public class ConfigurationActivity extends Activity 
 {
-    
     private ConfigurationController cConfiguration;
-    
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -28,7 +27,7 @@ public class ConfigurationActivity extends Activity
     @Override
     public void onBackPressed() 
     {
-        cConfiguration.openHomeIntent();
+        openHomeIntent();
     }
 
     @Override
@@ -53,16 +52,19 @@ public class ConfigurationActivity extends Activity
 
     public void storeConfiguration(View view)
     {
-        if(!cConfiguration.storeConnectionData())
-        {
-            cConfiguration.notify("Configuration could not be saved");
-        }
-        
-        openHomeIntent(null);
+        openHomeIntent();
     }
     
     public void openHomeIntent(View view)
     {
-        cConfiguration.openHomeIntent();
+        openHomeIntent();
+    }
+    
+    public void openHomeIntent()
+    {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        this.startActivity(intent);
+        this.finish();
     }
 }

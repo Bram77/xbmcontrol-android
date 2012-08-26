@@ -1,31 +1,108 @@
 package com.sudosystems.xbmcontrol.controllers;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import org.json.JSONObject;
+
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sudosystems.xbmc.client.RemoteClient;
+import com.sudosystems.xbmc.client.XbmcClient;
 import com.sudosystems.xbmcontrol.HomeActivity;
 import com.sudosystems.xbmcontrol.R;
 import com.sudosystems.xbmcontrol.RemoteActivity;
 import com.sudosystems.xbmcontrol.ConfigurationActivity;
 import com.sudosystems.xbmcontrol.SourceActivity;
+import com.sudosystems.xbmcontrol.SourceDirectoryActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class GlobalController
 {
-    private Context iContext;
-    private Activity iActivity;
+    private ConfigurationController iConfiguration;
+    public XbmcClient iXbmc;
+    public Context iContext;
+    public Activity iActivity;
     private ProgressDialog iDialog;
-    private RemoteClient remote;
+    private RemoteClient iRemote;
+    private ScheduledExecutorService iScheduledPing;
+    private ScheduledFuture<?> iPingRequest;
     
     public GlobalController(Context context)
     {
-        remote              = new RemoteClient();
+        iRemote             = new RemoteClient();
         iContext            = context;
         iActivity           = (Activity) context;
+        iConfiguration       = new ConfigurationController(context);
+        iXbmc               = new XbmcClient(context, iConfiguration.getConnectionData());
+        
+        startPing(StaticData.PING_INTERVAL);
+    }
+    
+    private void startPing(int interval)
+    {
+        iScheduledPing  = Executors.newScheduledThreadPool(5);
+        iPingRequest    = iScheduledPing.scheduleAtFixedRate(new Runnable() 
+        {
+            public void run() 
+            {
+                iXbmc.System.ping(new JsonHttpResponseHandler()
+                {
+                    @Override
+                    public void onSuccess(JSONObject response)
+                    {
+                        if(response == null || !response.optString("result").equals("pong"))
+                        {
+                            showConnectionLostDialog();
+                        }
+                    }
+                    
+                    @Override
+                    public void onFailure(Throwable e, String response) 
+                    {
+                        showConnectionLostDialog();
+                    }
+                });
+            }
+        }, 0, interval, TimeUnit.SECONDS);
+    }
+    
+    private void showConnectionLostDialog()
+    {
+        new AlertDialog.Builder(iContext)
+        .setIcon(android.R.drawable.ic_dialog_alert)
+        .setTitle("Connection error")
+        .setMessage("Unable to connect with XBMC. Do you wish to change your settings?")
+        .setPositiveButton("OK", new DialogInterface.OnClickListener() 
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                openSettingsIntent();    
+            }
+
+        })
+        .setNegativeButton("Reconnect", new DialogInterface.OnClickListener() 
+        {
+            public void onClick(DialogInterface dialog, int which)
+            {
+                openHomeIntent();    
+            }
+
+        })
+        .show();
     }
     
     public void notify(String message)
@@ -47,11 +124,11 @@ public class GlobalController
     {
         if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
         {
-            remote.volumeUp();
+            iRemote.volumeUp();
         }
         else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
         {
-            remote.volumeDown();
+            iRemote.volumeDown();
         }
         
         return true;
@@ -98,8 +175,10 @@ public class GlobalController
         iActivity.finish();
     }
     
-    public void openSourceIntent(String mediaType, String title)
+    public void openSourceIntent(String mediaType)
     {
+        String title = mediaType.substring(0,1).toUpperCase() + mediaType.substring(1);
+        
         Intent intent = new Intent(iContext, SourceActivity.class);
         intent.putExtra("MEDIA_TYPE", mediaType);
         intent.putExtra("ACTIVITY_TITLE", title);
@@ -110,17 +189,17 @@ public class GlobalController
     
     public void openAudioIntent()
     {
-        openSourceIntent(StaticData.MEDIA_TYPE_AUDIO, "Music");
+        openSourceIntent(StaticData.MEDIA_TYPE_AUDIO);
     }
     
     public void openVideoIntent()
     {
-        openSourceIntent(StaticData.MEDIA_TYPE_VIDEO, "Video");
+        openSourceIntent(StaticData.MEDIA_TYPE_VIDEO);
     }
     
     public void openPicturesIntent()
     {
-        openSourceIntent(StaticData.MEDIA_TYPE_PICTURES, "Pictures");
+        openSourceIntent(StaticData.MEDIA_TYPE_PICTURES);
     }
     
     public void openRemoteIntent()
@@ -137,5 +216,49 @@ public class GlobalController
         //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         iActivity.startActivity(intent);
         iActivity.finish();
+    }
+    
+    private void openSourceDirectoryIntent(String mediaType, String rootPath, String targetPath, View view)
+    {
+        String lTargetPath = "";
+        
+        if(view != null)
+        {
+            TableRow row            = (TableRow) view;
+            TextView rowText        = (TextView) row.getChildAt(2);
+            lTargetPath             = rowText.getText().toString();
+        }
+        else if(targetPath != null)
+        {
+            lTargetPath = targetPath;
+        }
+        
+        //TODO: Find more elegant way to check if trying to go below root
+        if(lTargetPath.length() < rootPath.length())
+        {
+            openSourceIntent(mediaType);
+            return;
+        }
+        
+        String[] aTargetPath    = lTargetPath.split("/");
+        String lTitle           = aTargetPath[(aTargetPath.length-1)];
+        Intent intent           = new Intent(iContext, SourceDirectoryActivity.class);
+        intent.putExtra("MEDIA_TYPE", mediaType);
+        intent.putExtra("ROOT_PATH", rootPath);
+        intent.putExtra("CURRENT_PATH", lTargetPath);
+        intent.putExtra("ACTIVITY_TITLE", lTitle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        iActivity.startActivity(intent);
+        iActivity.finish();
+    }
+
+    public void openSourceDirectoryIntent(String mediaType, String rootPath, String targetPath)
+    {
+        openSourceDirectoryIntent(mediaType, rootPath, targetPath, null);
+    }
+    
+    public void openSourceDirectoryIntent(String mediaType, String rootPath, View view)
+    {
+        openSourceDirectoryIntent(mediaType, rootPath, null, view);
     }
 }

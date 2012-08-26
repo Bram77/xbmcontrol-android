@@ -34,9 +34,7 @@ public class JsonRpcClient
     
     public void post(String method, JSONObject params, JsonHttpResponseHandler responseHandler)
     {
-        JSONObject rpcParams    = buildRpcObject(method, params);
-        Log.v("URL", baseUrl);
-        Log.v("POST params", rpcParams.toString());
+        JSONObject rpcParams = buildRpcObject(method, params);
         
         StringEntity oRawPostParams;
         

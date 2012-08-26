@@ -4,7 +4,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,20 +13,14 @@ import android.util.Log;
 public class HomeController extends GlobalController
 {
     private SharedPreferences nowPlayingStorage;
-    private Context applicationContext;
-    private Context iContext;
-    private Activity iActivity;
     private ScheduledExecutorService scheduleTaskExecutor;
     private ConfigurationController iConfiguration;
     
     public HomeController(Context context)
     {
         super(context);
-        iContext            = context;
-        iActivity           = (Activity) context;
-        applicationContext  = context.getApplicationContext();
         iConfiguration      = new ConfigurationController(context);
-        nowPlayingStorage   = applicationContext.getSharedPreferences(StaticData.STORAGE_NOWPLAYING, Context.MODE_PRIVATE);
+        nowPlayingStorage   = iContext.getSharedPreferences(StaticData.STORAGE_NOWPLAYING, Context.MODE_PRIVATE);
     }
 
     public void displayNowPlayingInfo()

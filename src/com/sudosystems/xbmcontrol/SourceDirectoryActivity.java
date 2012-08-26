@@ -4,6 +4,7 @@ import com.sudosystems.xbmcontrol.controllers.*;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
@@ -26,14 +27,12 @@ public class SourceDirectoryActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_source_directory);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        
+ 
         activityParams          = getIntent().getExtras();
         cSourceDirectory        = new SourceDirectoryController(this, activityParams);
         cSourceDirectory.displayDirectoryContent();
-        String activityTitle    = getIntent().getExtras().getString("MEDIA_TYPE")+ " / " +getIntent().getExtras().getString("ACTIVITY_TITLE");
-        activityTitle           = activityTitle.substring(0,1).toUpperCase() + activityTitle.substring(1);
         
+        String activityTitle = getIntent().getExtras().getString("MEDIA_TYPE")+ " / " +getIntent().getExtras().getString("ACTIVITY_TITLE");
         setTitle(getResources().getString(R.string.title_empty, activityTitle, activityTitle.length()));
     }
     

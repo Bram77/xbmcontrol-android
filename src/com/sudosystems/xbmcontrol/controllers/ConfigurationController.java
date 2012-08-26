@@ -12,10 +12,9 @@ import android.content.SharedPreferences.Editor;
 import android.util.Log;
 import android.widget.EditText;
 
-public class ConfigurationController extends GlobalController
+public class ConfigurationController
 {
-    private SharedPreferences storage;
-    private Activity iActivity;
+    private SharedPreferences iStorage;
     private EditText iHost;
     private EditText iHostPort;
     private EditText iConnectionTimeout;
@@ -24,10 +23,8 @@ public class ConfigurationController extends GlobalController
     
     public ConfigurationController(Context context)
     {
-        super(context);
-        
-        storage             = context.getApplicationContext().getSharedPreferences(StaticData.STORAGE_CONFIGURATION, Context.MODE_PRIVATE);
-        iActivity           = (Activity) context;
+        Activity iActivity  = (Activity) context;
+        iStorage            = context.getApplicationContext().getSharedPreferences(StaticData.STORAGE_CONFIGURATION, Context.MODE_PRIVATE);
         iHost               = (EditText) iActivity.findViewById(R.id.settings_host_address);
         iHostPort           = (EditText) iActivity.findViewById(R.id.settings_host_port);
         iConnectionTimeout  = (EditText) iActivity.findViewById(R.id.settings_connection_timeout);
@@ -55,7 +52,7 @@ public class ConfigurationController extends GlobalController
             return false;
         }
         
-        Editor configurationEditor = storage.edit();
+        Editor configurationEditor = iStorage.edit();
         configurationEditor.putString(StaticData.STORAGE_CONFIGURATION_CONNECTION, connectionParams.toString());
         configurationEditor.commit();
         
@@ -77,7 +74,7 @@ public class ConfigurationController extends GlobalController
     {
         try
         {
-            return new JSONObject(storage.getString(StaticData.STORAGE_CONFIGURATION_CONNECTION, "{}"));
+            return new JSONObject(iStorage.getString(StaticData.STORAGE_CONFIGURATION_CONNECTION, "{}"));
         }
         catch(JSONException e)
         {

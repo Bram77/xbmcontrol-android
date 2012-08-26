@@ -3,7 +3,6 @@ package com.sudosystems.xbmcontrol.controllers;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ViewGroup.LayoutParams;
@@ -13,30 +12,23 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.sudosystems.xbmc.client.XbmcClient;
 import com.sudosystems.xbmcontrol.R;
 
 public class SourceController extends GlobalController
 {
-    private XbmcClient xbmc;
-    private Activity iActivity;
     private Bundle iActivityParams;
     private SourceController self;
-    private ConfigurationController configuration;
     
     public SourceController(Context context, Bundle activityParams)
     {
         super(context);
         self            = this;
-        iActivity       = (Activity) context;
         iActivityParams = activityParams;
-        configuration   = new ConfigurationController(context);
-        xbmc            = new XbmcClient(context, configuration.getConnectionData());
     }
     
     public void displaySources()
     {
-        xbmc.Files.getSources(iActivityParams.getString("MEDIA_TYPE"), new JsonHttpResponseHandler()
+        iXbmc.Files.getSources(iActivityParams.getString("MEDIA_TYPE"), new JsonHttpResponseHandler()
         {
             @Override
             public void onStart()

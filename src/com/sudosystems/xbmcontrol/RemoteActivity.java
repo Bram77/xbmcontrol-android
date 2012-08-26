@@ -5,6 +5,7 @@ import com.sudosystems.xbmc.client.RemoteClient;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,7 +20,6 @@ public class RemoteActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remote);
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
         
         remote = new RemoteClient();
         
@@ -45,6 +45,23 @@ public class RemoteActivity extends Activity
         }
         
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event)
+    {
+        boolean isVolumeKey = (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP);
+        
+        if(isVolumeKey && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP)
+        {
+            remote.volumeUp();
+        }
+        else if(isVolumeKey && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN)
+        {
+            remote.volumeDown();
+        }
+        
+        return true;
     }
     
     @Override

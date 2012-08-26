@@ -19,7 +19,7 @@ public class FilesClient  extends JsonRpcClient
     
     public void getSources(String mediaType, JsonHttpResponseHandler responseHandler)
     {
-        JSONObject params = new JSONObject();
+        JSONObject params       = new JSONObject();
 
         try
         {
@@ -33,10 +33,11 @@ public class FilesClient  extends JsonRpcClient
 
         post(NAMESPACE+ "GetSources", params, responseHandler);
     }
-    
-    public void getDirectory(String mediaType, String directory, JsonHttpResponseHandler responseHandler)
+
+    public void getDirectory(boolean isLibraryMode, String mediaType, String directory, JsonHttpResponseHandler responseHandler)
     {
-        JSONObject params = new JSONObject();
+        JSONObject params       = new JSONObject();
+        String mediaRequested   = (isLibraryMode)? mediaType : "files";
 
         try
         {
@@ -44,7 +45,7 @@ public class FilesClient  extends JsonRpcClient
             
             if(mediaType != null)
             {
-                params.put("media", mediaType); //"files" for file mode
+                params.put("media", mediaRequested);
             }
             
             params.put("directory", directory);
@@ -59,6 +60,11 @@ public class FilesClient  extends JsonRpcClient
         }
 
         post(NAMESPACE+ "GetDirectory", params, responseHandler);
+    }
+    
+    public void getDirectory(String mediaType, String directory, JsonHttpResponseHandler responseHandler)
+    {
+        getDirectory(true, mediaType, directory, responseHandler);
     }
     
     public void getDirectory(String directory, JsonHttpResponseHandler responseHandler)
