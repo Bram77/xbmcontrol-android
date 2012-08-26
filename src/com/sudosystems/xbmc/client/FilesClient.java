@@ -12,9 +12,9 @@ public class FilesClient  extends JsonRpcClient
 {
     private static final String NAMESPACE   = "Files.";
     
-    public FilesClient(Context context)
+    public FilesClient(Context context, Configuration configuration)
     {
-        super(context);
+        super(context, configuration);
     }
     
     public void getSources(String mediaType, JsonHttpResponseHandler responseHandler)
@@ -44,7 +44,7 @@ public class FilesClient  extends JsonRpcClient
             
             if(mediaType != null)
             {
-                params.put("media", mediaType);
+                params.put("media", mediaType); //"files" for file mode
             }
             
             params.put("directory", directory);
@@ -64,13 +64,5 @@ public class FilesClient  extends JsonRpcClient
     public void getDirectory(String directory, JsonHttpResponseHandler responseHandler)
     {
         getDirectory(null, directory, responseHandler);
-    }
-
-    
-    public final class MediaType
-    {
-        public final static String VIDEO    = "video";
-        public final static String AUDIO    = "music";
-        public final static String PICTURES = "pictures";
     }
 }

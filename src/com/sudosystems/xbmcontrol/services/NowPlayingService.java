@@ -5,10 +5,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sudosystems.xbmc.client.XbmcClient;
+import com.sudosystems.xbmcontrol.controllers.StaticData;
 
 import android.app.Service;
 import android.content.Context;
@@ -20,18 +22,32 @@ import android.util.Log;
 
 public class NowPlayingService extends Service
 {
-    private XbmcClient xbmc;
+    private XbmcClient iXbmc            = null;
     public int activePlayerId           = -1;
-    private SharedPreferences preferences;
-    private Editor preferencesEditor    = null;
+    private Editor nowPlayingEditor     = null;
+    private Context applicationContext;
     
     @Override
     public void onCreate()
     {
-        xbmc                = new XbmcClient(this);
-        Context context     = getApplicationContext();
-        preferences         = context.getSharedPreferences("NowPlaying", Context.MODE_PRIVATE);
-        preferencesEditor   = preferences.edit();
+       
+        applicationContext                      = getApplicationContext();
+        SharedPreferences nowPlayingStorage     = applicationContext.getSharedPreferences(StaticData.STORAGE_NOWPLAYING, Context.MODE_PRIVATE);
+        SharedPreferences configurationStorage  = applicationContext.getSharedPreferences(StaticData.STORAGE_CONFIGURATION, Context.MODE_PRIVATE);
+        nowPlayingEditor                        = nowPlayingStorage.edit();
+        
+        try
+        {
+            JSONObject connectionConfigurationData  = new JSONObject(configurationStorage.getString(StaticData.STORAGE_CONFIGURATION_CONNECTION, "{}"));
+            iXbmc                                   = new XbmcClient(this, connectionConfigurationData);
+        }
+        catch(JSONException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        
     }
     
     @Override
@@ -50,7 +66,7 @@ public class NowPlayingService extends Service
     
     private void setNowPlayingData()
     {
-        xbmc.Player.getActivePlayers(new JsonHttpResponseHandler()
+        iXbmc.Player.getActivePlayers(new JsonHttpResponseHandler()
         {
             @Override
             public void onSuccess(JSONObject response)
@@ -61,12 +77,12 @@ public class NowPlayingService extends Service
                 {
                     JSONObject activePlayer = result.optJSONObject(0);
                     
-                    preferencesEditor.putBoolean("is_playing", true);
-                    preferencesEditor.putInt("player_id", activePlayer.optInt("playerid"));
-                    preferencesEditor.putString("player_type", activePlayer.optString("type"));
-                    preferencesEditor.commit();
+                    nowPlayingEditor.putBoolean("is_playing", true);
+                    nowPlayingEditor.putInt("player_id", activePlayer.optInt("playerid"));
+                    nowPlayingEditor.putString("player_type", activePlayer.optString("type"));
+                    nowPlayingEditor.commit();
                     
-                    xbmc.Player.getNowPlayingItem(activePlayer.optInt("playerid"), itemHandler);
+                    iXbmc.Player.getNowPlayingItem(activePlayer.optInt("playerid"), itemHandler);
                     
                     return;
                 }
@@ -96,15 +112,15 @@ public class NowPlayingService extends Service
                 
                 if(nowPlayingItem.optString("type").equals("song"))
                 {
-                    xbmc.AudioLibrary.getSongDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
+                    iXbmc.AudioLibrary.getSongDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
                 }
                 else if(nowPlayingItem.optString("type").equals("movie"))
                 {
-                    xbmc.VideoLibrary.getMovieDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
+                    iXbmc.VideoLibrary.getMovieDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
                 }
                 else if(nowPlayingItem.optString("type").equals("episode"))
                 {
-                    xbmc.VideoLibrary.getEpisodeDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
+                    iXbmc.VideoLibrary.getEpisodeDetails(nowPlayingItem.optInt("id"), itemDetailsHandler);
                 }
                 
                 return;
@@ -135,17 +151,17 @@ public class NowPlayingService extends Service
     
     private void resetData()
     {
-        preferencesEditor.putBoolean("is_playing", false);
-        preferencesEditor.putInt("player_id", -1);
-        preferencesEditor.putString("player_type", "");
-        preferencesEditor.putString("media_data_json", "");
-        preferencesEditor.commit();
+        nowPlayingEditor.putBoolean("is_playing", false);
+        nowPlayingEditor.putInt("player_id", -1);
+        nowPlayingEditor.putString("player_type", "");
+        nowPlayingEditor.putString("media_data_json", "");
+        nowPlayingEditor.commit();
     }
     
     private void storeItemData(JSONObject nowPlayingData)
     {
-        preferencesEditor.putString("playing_item_json", nowPlayingData.toString());
-        preferencesEditor.commit();
+        nowPlayingEditor.putString("playing_item_json", nowPlayingData.toString());
+        nowPlayingEditor.commit();
         Log.v("NOW_PLAYING", nowPlayingData.toString());
     }
 

@@ -1,10 +1,10 @@
 package com.sudosystems.xbmcontrol.controllers;
 
 import com.sudosystems.xbmc.client.RemoteClient;
-import com.sudosystems.xbmc.client.FilesClient.MediaType;
 import com.sudosystems.xbmcontrol.HomeActivity;
 import com.sudosystems.xbmcontrol.R;
 import com.sudosystems.xbmcontrol.RemoteActivity;
+import com.sudosystems.xbmcontrol.ConfigurationActivity;
 import com.sudosystems.xbmcontrol.SourceActivity;
 
 import android.app.Activity;
@@ -23,9 +23,9 @@ public class GlobalController
     
     public GlobalController(Context context)
     {
-        remote      = new RemoteClient();
-        iContext    = context;
-        iActivity   = (Activity) context;
+        remote              = new RemoteClient();
+        iContext            = context;
+        iActivity           = (Activity) context;
     }
     
     public void notify(String message)
@@ -59,12 +59,12 @@ public class GlobalController
     
     public int getMediaIcon(boolean isDirectory, String mediaType)
     {
-        if(mediaType.equals(MediaType.AUDIO))
+        if(mediaType.equals(StaticData.MEDIA_TYPE_AUDIO))
         {
             return (isDirectory)? R.drawable.folder_audio_64 : R.drawable.file_audio_64 ;
         }
         
-        if(mediaType.equals(MediaType.VIDEO))
+        if(mediaType.equals(StaticData.MEDIA_TYPE_VIDEO))
         {
             if(isDirectory)
             {
@@ -82,7 +82,7 @@ public class GlobalController
             }
         }
         
-        if(mediaType.equals(MediaType.PICTURES))
+        if(mediaType.equals(StaticData.MEDIA_TYPE_PICTURES))
         {
             return (isDirectory)? R.drawable.folder_pictures_64 : R.drawable.file_image_64;
         }
@@ -110,23 +110,31 @@ public class GlobalController
     
     public void openAudioIntent()
     {
-        openSourceIntent(MediaType.AUDIO, "Music");
+        openSourceIntent(StaticData.MEDIA_TYPE_AUDIO, "Music");
     }
     
     public void openVideoIntent()
     {
-        openSourceIntent(MediaType.VIDEO, "Video");
+        openSourceIntent(StaticData.MEDIA_TYPE_VIDEO, "Video");
     }
     
     public void openPicturesIntent()
     {
-        openSourceIntent(MediaType.PICTURES, "Pictures");
+        openSourceIntent(StaticData.MEDIA_TYPE_PICTURES, "Pictures");
     }
     
     public void openRemoteIntent()
     {
         Intent intent = new Intent(iContext, RemoteActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        iActivity.startActivity(intent);
+        iActivity.finish();
+    }
+    
+    public void openSettingsIntent()
+    {
+        Intent intent = new Intent(iContext, ConfigurationActivity.class);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         iActivity.startActivity(intent);
         iActivity.finish();
     }

@@ -22,6 +22,7 @@ public class SourceController extends GlobalController
     private Activity iActivity;
     private Bundle iActivityParams;
     private SourceController self;
+    private ConfigurationController configuration;
     
     public SourceController(Context context, Bundle activityParams)
     {
@@ -29,7 +30,8 @@ public class SourceController extends GlobalController
         self            = this;
         iActivity       = (Activity) context;
         iActivityParams = activityParams;
-        xbmc            = new XbmcClient(context);
+        configuration   = new ConfigurationController(context);
+        xbmc            = new XbmcClient(context, configuration.getConnectionData());
     }
     
     public void displaySources()

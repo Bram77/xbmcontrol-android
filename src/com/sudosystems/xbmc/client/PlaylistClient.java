@@ -7,15 +7,14 @@ import android.content.Context;
 import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.sudosystems.xbmc.client.FilesClient.MediaType;
 
 public class PlaylistClient  extends JsonRpcClient
 {
     private static final String NAMESPACE = "Playlist.";
     
-    public PlaylistClient(Context context)
+    public PlaylistClient(Context context, Configuration configuration)
     {
-        super(context);
+        super(context, configuration);
     }
     
     private void add(String mediaType, String path, boolean isDirectory, JsonHttpResponseHandler responseHandler)
@@ -111,15 +110,15 @@ public class PlaylistClient  extends JsonRpcClient
         {
             int playlistId = -1;
             
-            if(mediaType.equals(MediaType.AUDIO))
+            if(mediaType.equals(StaticData.MEDIA_TYPE_AUDIO))
             {
                 playlistId = PlaylistType.AUDIO;
             }
-            else if(mediaType.equals(MediaType.VIDEO))
+            else if(mediaType.equals(StaticData.MEDIA_TYPE_VIDEO))
             {
                 playlistId = PlaylistType.VIDEO;
             }
-            else if(mediaType.equals(MediaType.PICTURES))
+            else if(mediaType.equals(StaticData.MEDIA_TYPE_PICTURES))
             {
                 playlistId = PlaylistType.PICTURES;
             }

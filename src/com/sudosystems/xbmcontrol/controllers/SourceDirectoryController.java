@@ -4,7 +4,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.sudosystems.xbmc.client.FilesClient.MediaType;
 import com.sudosystems.xbmc.client.XbmcClient;
 import com.sudosystems.xbmcontrol.R;
 import com.sudosystems.xbmcontrol.SourceDirectoryActivity;
@@ -13,6 +12,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,13 +24,14 @@ import android.widget.TextView;
 
 public class SourceDirectoryController extends GlobalController
 {
-    private XbmcClient xbmc;
+    private XbmcClient iXbmc;
     private Activity iActivity;
     private Bundle iActivityParams;
     private Context iContext;
     private SourceDirectoryController self;
     private TableRow iContextMenuRow    = null;
     private TableRow ioDirectoryUpRow   = null;
+    private ConfigurationController configuration;
     
     public SourceDirectoryController(Context context, Bundle activityParams)
     {
@@ -39,7 +40,7 @@ public class SourceDirectoryController extends GlobalController
         iContext        = context;
         iActivity       = (Activity) context;
         iActivityParams = activityParams;
-        xbmc            = new XbmcClient(context);
+        iXbmc           = new XbmcClient(context, configuration.getConnectionData());
     }
     
     public void setContextMenuRow(TableRow sourceRow)
@@ -57,7 +58,7 @@ public class SourceDirectoryController extends GlobalController
     
     public void displayDirectoryContent()
     {
-        xbmc.Files.getDirectory(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("CURRENT_PATH"), new JsonHttpResponseHandler()
+        iXbmc.Files.getDirectory(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("CURRENT_PATH"), new JsonHttpResponseHandler()
         {
             @Override
             public void onStart()
@@ -113,6 +114,8 @@ public class SourceDirectoryController extends GlobalController
             return;
         }
         
+        Log.v("RESULT", files.toString());
+        
         TableLayout sourcesTable = (TableLayout) iActivity.findViewById(R.id.table_source_directory);
         addDirectoryUpRow(sourcesTable);
 
@@ -134,7 +137,7 @@ public class SourceDirectoryController extends GlobalController
                     }
                     else
                     {
-                        if(iActivityParams.getString("MEDIA_TYPE").equals(MediaType.AUDIO))
+                        if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
                         {
                             playDirectory(files.optJSONObject(index), index);
                         }
@@ -183,11 +186,14 @@ public class SourceDirectoryController extends GlobalController
     
     public void openSourceDirectoryIntent(String mediaType, String rootPath, String targetPath, String title)
     {
+        String[] aTargetPath    = targetPath.split("/");
+        String lTitle           = aTargetPath[(aTargetPath.length-1)];
+        
         Intent intent = new Intent(iContext, SourceDirectoryActivity.class);
         intent.putExtra("MEDIA_TYPE", mediaType);
         intent.putExtra("ROOT_PATH", rootPath);
         intent.putExtra("CURRENT_PATH", targetPath);
-        intent.putExtra("ACTIVITY_TITLE", title);
+        intent.putExtra("ACTIVITY_TITLE", lTitle);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         iActivity.startActivity(intent);
         iActivity.finish();
@@ -230,7 +236,7 @@ public class SourceDirectoryController extends GlobalController
     
     public void playFile(final JSONObject fileData)
     {
-        xbmc.Player.playFile(fileData.optString("file"), new JsonHttpResponseHandler()
+        iXbmc.Player.playFile(fileData.optString("file"), new JsonHttpResponseHandler()
         {
             @Override
             public void onSuccess(JSONObject response)
@@ -264,7 +270,7 @@ public class SourceDirectoryController extends GlobalController
             path    = iActivityParams.getString("CURRENT_PATH");
         }
 
-        xbmc.Playlist.addDirectory(iActivityParams.getString("MEDIA_TYPE"), path, true, new JsonHttpResponseHandler()
+        iXbmc.Playlist.addDirectory(iActivityParams.getString("MEDIA_TYPE"), path, true, new JsonHttpResponseHandler()
         {
             @Override
             public void onStart()
@@ -304,7 +310,7 @@ public class SourceDirectoryController extends GlobalController
 
         if(addDirectoryResult != null && addDirectoryResult.equals("OK"))
         {
-            xbmc.Player.playPlaylist(iActivityParams.getString("MEDIA_TYPE"), itemIndex, new JsonHttpResponseHandler()
+            iXbmc.Player.playPlaylist(iActivityParams.getString("MEDIA_TYPE"), itemIndex, new JsonHttpResponseHandler()
             {
                 @Override
                 public void onSuccess(JSONObject response)

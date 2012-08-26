@@ -12,9 +12,9 @@ public class AudioLibraryClient  extends JsonRpcClient
 {
     private static final String NAMESPACE = "AudioLibrary.";
     
-    public AudioLibraryClient(Context context)
+    public AudioLibraryClient(Context context, Configuration configuration)
     {
-        super(context);
+        super(context, configuration);
     }
     
     public void getSongDetails(int songid, JsonHttpResponseHandler responseHandler)

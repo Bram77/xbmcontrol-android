@@ -4,16 +4,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import com.sudosystems.xbmc.client.FilesClient.MediaType;
-import com.sudosystems.xbmcontrol.RemoteActivity;
-import com.sudosystems.xbmcontrol.SourceActivity;
-
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.View;
 
 public class HomeController extends GlobalController
 {
@@ -22,16 +18,18 @@ public class HomeController extends GlobalController
     private Context iContext;
     private Activity iActivity;
     private ScheduledExecutorService scheduleTaskExecutor;
+    private ConfigurationController iConfiguration;
     
     public HomeController(Context context)
     {
         super(context);
         iContext            = context;
-        applicationContext  = context.getApplicationContext();
-        nowPlayingStorage   = applicationContext.getSharedPreferences("NowPlaying", Context.MODE_PRIVATE);
         iActivity           = (Activity) context;
+        applicationContext  = context.getApplicationContext();
+        iConfiguration      = new ConfigurationController(context);
+        nowPlayingStorage   = applicationContext.getSharedPreferences(StaticData.STORAGE_NOWPLAYING, Context.MODE_PRIVATE);
     }
-    
+
     public void displayNowPlayingInfo()
     {
         scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
@@ -51,5 +49,35 @@ public class HomeController extends GlobalController
     public void cancelDisplayNowPlayingInfo()
     {
         scheduleTaskExecutor.shutdown();
+    }
+    
+    public void showInitConfigurationDialog()
+    {
+        new AlertDialog.Builder(iContext)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setTitle("Configuration required")
+            .setMessage("Please configure your XBMC connection")
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() 
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    openSettingsIntent();    
+                }
+    
+            })
+            .setNegativeButton("Close", new DialogInterface.OnClickListener() 
+            {
+                public void onClick(DialogInterface dialog, int which)
+                {
+                    iActivity.finish();    
+                }
+    
+            })
+            .show();
+    }
+    
+    public boolean isConfigured()
+    {
+        return (!iConfiguration.getConnectionValue("host_address").equals(""));
     }
 }

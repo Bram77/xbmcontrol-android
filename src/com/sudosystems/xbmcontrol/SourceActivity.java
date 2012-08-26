@@ -70,10 +70,10 @@ public class SourceActivity extends Activity
     @Override
     public void onBackPressed() 
     {
-        Intent intent = new Intent(SourceActivity.this, HomeActivity.class);
+        Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        SourceActivity.this.startActivity(intent);
-        SourceActivity.this.finish();
+        this.startActivity(intent);
+        this.finish();
     }
     
     public void displayDirectoryContent(View view)

@@ -28,11 +28,13 @@ public class SourceDirectoryActivity extends Activity
         setContentView(R.layout.activity_source_directory);
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         
-        activityParams      = getIntent().getExtras();
-        cSourceDirectory    = new SourceDirectoryController(this, activityParams);
+        activityParams          = getIntent().getExtras();
+        cSourceDirectory        = new SourceDirectoryController(this, activityParams);
         cSourceDirectory.displayDirectoryContent();
+        String activityTitle    = getIntent().getExtras().getString("MEDIA_TYPE")+ " / " +getIntent().getExtras().getString("ACTIVITY_TITLE");
+        activityTitle           = activityTitle.substring(0,1).toUpperCase() + activityTitle.substring(1);
         
-        setTitle(getResources().getString(R.string.title_global, getIntent().getExtras().getString("ACTIVITY_TITLE"), getIntent().getExtras().getString("ACTIVITY_TITLE").length()));
+        setTitle(getResources().getString(R.string.title_empty, activityTitle, activityTitle.length()));
     }
     
     @Override
@@ -42,7 +44,7 @@ public class SourceDirectoryActivity extends Activity
       
       cSourceDirectory.setContextMenuRow((TableRow) sourceRow);
       TextView sourceTitle  = (TextView) ((ViewGroup) sourceRow).getChildAt(1);
-      menu.setHeaderTitle("Directory '" +sourceTitle.getText()+ "'");
+      menu.setHeaderTitle("'" +sourceTitle.getText()+ "'");
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.source_directory_context_menu, menu);
     }

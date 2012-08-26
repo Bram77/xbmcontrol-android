@@ -6,7 +6,19 @@
     <string name="title_activity_remote">Remote</string>
     <string name="title_activity_source">SourceActivity</string>
     <string name="title_global">XBMControl - %s</string>
+    <string name="title_empty">%s</string>
     <string name="title_activity_source_directory">SourceDirectoryActivity</string>
     <string name="up">Up</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_configuration">XBMControl - Configuration</string>
+    <string name="host">host</string>
+    <string name="port">port</string>
+    <string name="tomeout">timeout</string>
+    <string name="username">username</string>
+    <string name="password">password</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="ok">OK</string>
+    <string name="close">Close</string>
 
 </resources>

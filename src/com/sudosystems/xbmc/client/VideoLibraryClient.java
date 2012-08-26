@@ -12,9 +12,9 @@ public class VideoLibraryClient  extends JsonRpcClient
 {
     private static final String NAMESPACE = "AudioLibrary.";
     
-    public VideoLibraryClient(Context context)
+    public VideoLibraryClient(Context context, Configuration configuration)
     {
-        super(context);
+        super(context, configuration);
     }
     
     public void getMovieDetails(int movieid, JsonHttpResponseHandler responseHandler)

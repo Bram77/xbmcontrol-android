@@ -3,9 +3,9 @@ package com.sudosystems.xbmcontrol;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.sudosystems.xbmcontrol.controllers.HomeController;
@@ -20,8 +20,14 @@ public class HomeActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         cHome = new HomeController(this);
-        cHome.displayNowPlayingInfo();
         
+        if(!cHome.isConfigured())
+        {
+            cHome.showInitConfigurationDialog();
+            return;
+        }
+        
+        cHome.displayNowPlayingInfo();
         startService(new Intent(this, NowPlayingService.class));
     }
     
@@ -72,5 +78,10 @@ public class HomeActivity extends Activity
     public void openRemoteIntent(View view)
     {
         cHome.openRemoteIntent();
+    }
+    
+    public void openSettingsIntent(MenuItem menuItem)
+    {
+        cHome.openSettingsIntent();
     }
 }

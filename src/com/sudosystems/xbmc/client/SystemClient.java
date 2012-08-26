@@ -13,9 +13,9 @@ public class SystemClient extends JsonRpcClient
     private static final String NAMESPACE   = "JSONRPC.";
     private static final String APP_NAME    = "XBMControl";
     
-    public SystemClient(Context context)
+    public SystemClient(Context context, Configuration configuration)
     {
-        super(context);
+        super(context, configuration);
     }
     
     public void introspect(JsonHttpResponseHandler responseHandler)

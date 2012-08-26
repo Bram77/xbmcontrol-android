@@ -44,7 +44,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sudosystems.xbmcontrol.SourceActivity" />
         </activity>
-        <service android:enabled="true" android:name=".NowPlayingService"></service>
+
+        <service
+            android:name=".NowPlayingService"
+            android:enabled="true" >
+        </service>
+
+        <activity
+            android:name=".ConfigurationActivity"
+            android:label="@string/title_activity_configuration" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sudosystems.xbmcontrol.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

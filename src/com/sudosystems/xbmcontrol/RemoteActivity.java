@@ -4,7 +4,7 @@ import com.sudosystems.xbmc.client.RemoteClient;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.view.KeyEvent;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +45,15 @@ public class RemoteActivity extends Activity
         }
         
         return super.onOptionsItemSelected(item);
+    }
+    
+    @Override
+    public void onBackPressed() 
+    {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        this.startActivity(intent);
+        this.finish();
     }
     
     @Override
