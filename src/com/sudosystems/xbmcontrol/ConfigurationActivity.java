@@ -33,7 +33,7 @@ public class ConfigurationActivity extends Activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) 
     {
-        getMenuInflater().inflate(R.menu.activity_settings, menu);
+        getMenuInflater().inflate(R.menu.activity_configuration, menu);
         return true;
     }
 

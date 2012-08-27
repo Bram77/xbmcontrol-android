@@ -54,7 +54,7 @@ public class HomeController extends GlobalController
             {
                 public void onClick(DialogInterface dialog, int which)
                 {
-                    openSettingsIntent();    
+                    openConfigurationIntent();    
                 }
     
             })

@@ -5,8 +5,27 @@
 
     <ImageView
         style="@style/DefaultDirectoryRowIcon"
+        android:layout_gravity="left"
+        android:contentDescription="TODO"
         android:src="@drawable/folder_64" />
-    <TextView style="@style/DefaultDirectoryTitle" />
+    
+    <TextView 
+        style="@style/DefaultDirectoryTitle" 
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:textStyle="normal" />
+    
     <TextView style="@style/DefaultDirectorySource" />
+    
+    <ImageView
+        android:id="@+id/imageView2"
+        android:contentDescription="TODO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp"
+        android:src="@drawable/checked_32"
+        android:visibility="gone" />
 
 </TableRow>

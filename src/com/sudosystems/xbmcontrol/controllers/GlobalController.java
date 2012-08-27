@@ -23,6 +23,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,10 +33,11 @@ import android.widget.Toast;
 
 public class GlobalController
 {
-    private ConfigurationController iConfiguration;
+    public ConfigurationController Configuration;
     public XbmcClient iXbmc;
     public Context iContext;
     public Activity iActivity;
+    public Bundle iActivityParams;
     private ProgressDialog iDialog;
     private RemoteClient iRemote;
     private ScheduledExecutorService iScheduledPing;
@@ -46,8 +48,9 @@ public class GlobalController
         iRemote             = new RemoteClient();
         iContext            = context;
         iActivity           = (Activity) context;
-        iConfiguration       = new ConfigurationController(context);
-        iXbmc               = new XbmcClient(context, iConfiguration.getConnectionData());
+        iActivityParams     = iActivity.getIntent().getExtras();
+        Configuration       = new ConfigurationController(context);
+        iXbmc               = new XbmcClient(context, Configuration.getConnectionData());
         
         startPing(StaticData.PING_INTERVAL);
     }
@@ -90,7 +93,7 @@ public class GlobalController
         {
             public void onClick(DialogInterface dialog, int which)
             {
-                openSettingsIntent();    
+                openConfigurationIntent();    
             }
 
         })
@@ -134,7 +137,7 @@ public class GlobalController
         return true;
     }
     
-    public int getMediaIcon(boolean isDirectory, String mediaType)
+    public int getMediaIcon(boolean isDirectory, String mediaType, String type)
     {
         if(mediaType.equals(StaticData.MEDIA_TYPE_AUDIO))
         {
@@ -143,17 +146,17 @@ public class GlobalController
         
         if(mediaType.equals(StaticData.MEDIA_TYPE_VIDEO))
         {
-            if(isDirectory)
+            if(isDirectory && !type.equals("movie"))
             {
                 return R.drawable.folder_video_64;
             }
             
-            if(mediaType.equals("episode"))
+            if(type.equals("episode"))
             {
                 return R.drawable.file_video_64;
             }
             
-            if(mediaType.equals("movie"))
+            if(type.equals("movie"))
             {
                 return R.drawable.file_video_64;
             }
@@ -165,6 +168,11 @@ public class GlobalController
         }
         
         return (isDirectory)? R.drawable.folder_64 : R.drawable.file_64;
+    }
+    
+    public int getMediaIcon(boolean isDirectory, String mediaType)
+    {
+        return getMediaIcon(isDirectory, mediaType, "");
     }
     
     public void openHomeIntent()
@@ -210,7 +218,7 @@ public class GlobalController
         iActivity.finish();
     }
     
-    public void openSettingsIntent()
+    public void openConfigurationIntent()
     {
         Intent intent = new Intent(iContext, ConfigurationActivity.class);
         //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -260,5 +268,10 @@ public class GlobalController
     public void openSourceDirectoryIntent(String mediaType, String rootPath, View view)
     {
         openSourceDirectoryIntent(mediaType, rootPath, null, view);
+    }
+    
+    public void openSourceDirectoryIntent()
+    {
+        openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), iActivityParams.getString("CURRENT_PATH"));
     }
 }

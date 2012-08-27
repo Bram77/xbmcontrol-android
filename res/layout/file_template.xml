@@ -1,15 +1,31 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/DefaultDirectoryRow"
+    android:layout_width="fill_parent"
     android:background="@drawable/clickable_table_row" >
 
     <ImageView
         style="@style/DefaultDirectoryRowIcon"
+        android:layout_gravity="left"
+        android:contentDescription="TODO"
         android:src="@drawable/file_64" />
 
     <TextView
         style="@style/DefaultDirectoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
         android:textStyle="normal" />
 
     <TextView style="@style/DefaultDirectorySource" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:contentDescription="TODO"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp"
+        android:src="@drawable/checked_32"
+        android:visibility="gone" />
 
 </TableRow>

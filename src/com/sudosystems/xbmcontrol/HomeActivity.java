@@ -80,8 +80,8 @@ public class HomeActivity extends Activity
         cHome.openRemoteIntent();
     }
     
-    public void openSettingsIntent(MenuItem menuItem)
+    public void openConfigurationIntent(MenuItem menuItem)
     {
-        cHome.openSettingsIntent();
+        cHome.openConfigurationIntent();
     }
 }

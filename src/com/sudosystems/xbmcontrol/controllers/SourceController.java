@@ -16,14 +16,12 @@ import com.sudosystems.xbmcontrol.R;
 
 public class SourceController extends GlobalController
 {
-    private Bundle iActivityParams;
     private SourceController self;
     
-    public SourceController(Context context, Bundle activityParams)
+    public SourceController(Context context)
     {
         super(context);
-        self            = this;
-        iActivityParams = activityParams;
+        self = this;
     }
     
     public void displaySources()

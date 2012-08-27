@@ -5,9 +5,13 @@ import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sudosystems.xbmcontrol.R;
+import com.sudosystems.xbmcontrol.R.color;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,21 +23,36 @@ import android.widget.TextView;
 
 public class SourceDirectoryController extends GlobalController
 {
-    private Bundle iActivityParams;
     private SourceDirectoryController self;
     private TableRow iContextMenuRow    = null;
     private TableRow ioDirectoryUpRow   = null;
     
-    public SourceDirectoryController(Context context, Bundle activityParams)
+    public SourceDirectoryController(Context context)
     {
         super(context);
-        self            = this;
-        iActivityParams = activityParams;
+        self = this;
     }
     
     public void setContextMenuRow(TableRow sourceRow)
     {
         iContextMenuRow = sourceRow;
+    }
+    
+    public void prepareMenu(Menu menu)
+    {
+        if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
+        {
+            if(Configuration.isHideWatchedEnabled())
+            {
+                menu.getItem(2).setVisible(false);
+                menu.getItem(1).setVisible(true);
+            }
+            else
+            {
+                menu.getItem(2).setVisible(true);
+                menu.getItem(1).setVisible(false);
+            }
+        }
     }
     
     public void showDirectoryUpIntent()
@@ -57,6 +76,8 @@ public class SourceDirectoryController extends GlobalController
             @Override
             public void onSuccess(JSONObject response)
             {
+                Log.v("RESULT", response.toString());
+                
                 handleDisplayDirectoryResponse(response);
             }
             
@@ -107,43 +128,82 @@ public class SourceDirectoryController extends GlobalController
 
         for(int i=0; i < files.length(); i++)
         {
-            final int index            = i;
-            final boolean isDirectory  = (files.optJSONObject(index).optString("filetype", "").equals("directory"));
-            TableRow sourceRow          = (isDirectory)? (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null) : (TableRow) iActivity.getLayoutInflater().inflate(R.layout.file_template, null);
-            ImageView rowIcon           = (ImageView) sourceRow.getChildAt(0);
-            rowIcon.setImageResource(getMediaIcon(isDirectory, iActivityParams.getString("MEDIA_TYPE")));
-
-            sourceRow.setOnClickListener(new OnClickListener() 
+            final int index    = i;
+            JSONObject file     = files.optJSONObject(index);
+            int track           = file.optInt("track", -1);
+            int episode         = file.optInt("episode", -1);
+            String labelPrefix  = "";
+            
+            final boolean isDirectory   = (file.optString("filetype", "").equals("directory"));
+            final boolean isMovie       = (file.optString("type", "").equals("movie"));
+            final boolean isWatched     = (file.optInt("playcount", 0) > 0);
+            final boolean isVideo       = (iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO));
+            
+            if(isWatched && isVideo && Configuration.isHideWatchedEnabled())
             {
-                public void onClick(View view) 
+                //todo
+            }
+            else
+            {
+                TableRow sourceRow          = (isDirectory)? (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null) : (TableRow) iActivity.getLayoutInflater().inflate(R.layout.file_template, null);
+                ImageView rowIcon           = (ImageView) sourceRow.getChildAt(0);
+                rowIcon.setImageResource(getMediaIcon(isDirectory, iActivityParams.getString("MEDIA_TYPE"), file.optString("type", "")));
+                
+                //Apply watched status
+                if(isWatched && iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
                 {
-                    if(isDirectory)
+                    ImageView rowWatchedIcon    = (ImageView) sourceRow.getChildAt(3);
+                    TextView rowLabel           = (TextView) sourceRow.getChildAt(1);
+                    rowWatchedIcon.setVisibility(View.VISIBLE);
+                    rowLabel.setTextColor(Color.LTGRAY);
+                }
+    
+                sourceRow.setOnClickListener(new OnClickListener() 
+                {
+                    public void onClick(View view) 
                     {
-                        openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), view);
-                    }
-                    else
-                    {
-                        if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
+                        if(isDirectory && !isMovie)
                         {
-                            playDirectory(files.optJSONObject(index), index);
+                            openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), view);
                         }
                         else
                         {
-                            playFile(files.optJSONObject(index));
+                            if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
+                            {
+                                playDirectory(files.optJSONObject(index), index);
+                            }
+                            else
+                            {
+                                playFile(files.optJSONObject(index));
+                            }
                         }
+                    }   
+                });
+                
+                sourceRow.setOnCreateContextMenuListener(iActivity);
+                
+                //Apply media prefix
+                if(!isDirectory)
+                {
+                    if(track > -1)
+                    {
+                        labelPrefix = Integer.toString(track)+". ";
                     }
-                }   
-            });
-            
-            sourceRow.setOnCreateContextMenuListener(iActivity);
-            
-            TextView sourceTitle = (TextView) sourceRow.getChildAt(1);
-            sourceTitle.setText(files.optJSONObject(index).optString("label", "> No label specified <"));
-            
-            TextView sourcePath = (TextView) sourceRow.getChildAt(2);
-            sourcePath.setText(files.optJSONObject(index).optString("file", ""));
-            
-            sourcesTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+                    
+                    if(episode > -1)
+                    {
+                        labelPrefix = Integer.toString(episode)+". ";
+                    }
+                }
+
+                TextView sourceTitle    = (TextView) sourceRow.getChildAt(1);
+                sourceTitle.setText(labelPrefix+file.optString("label", "> No label specified <"));
+                
+                TextView sourcePath = (TextView) sourceRow.getChildAt(2);
+                sourcePath.setText(files.optJSONObject(index).optString("file", ""));
+    
+                sourcesTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+            }
         }
     }
     

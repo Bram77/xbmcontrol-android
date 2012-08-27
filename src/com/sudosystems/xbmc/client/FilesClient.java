@@ -1,5 +1,6 @@
 package com.sudosystems.xbmc.client;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,7 +9,7 @@ import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-public class FilesClient  extends JsonRpcClient
+public class FilesClient extends JsonRpcClient
 {
     private static final String NAMESPACE   = "Files.";
     
@@ -41,17 +42,27 @@ public class FilesClient  extends JsonRpcClient
 
         try
         {
-            JSONObject sortParams = new JSONObject();
-            
             if(mediaType != null)
             {
                 params.put("media", mediaRequested);
             }
             
             params.put("directory", directory);
+            
+            JSONObject sortParams = new JSONObject();
+            sortParams.put("method", "label");
             sortParams.put("order", "ascending");
-            sortParams.put("method", "file");
+            
+            JSONArray properties = new JSONArray();
+            //properties.put("title");
+            properties.put("file");
+            properties.put("track");
+            properties.put("episode");
+            //properties.put("thumbnail");
+            properties.put("playcount");
+            
             params.put("sort", sortParams);
+            params.put("properties", properties);
         }
         catch(JSONException e)
         {

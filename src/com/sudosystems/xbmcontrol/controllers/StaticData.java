@@ -7,7 +7,8 @@ public final class StaticData
     public static final String STORAGE_NOWPLAYING       = "now_playing";
     
     //Storage entries
-    public static final String STORAGE_CONFIGURATION_CONNECTION = "connection";
+    public static final String STORAGE_CONFIGURATION_CONNECTION     = "connection";
+    public static final String STORAGE_CONFIGURATION_HIDE_WATCHED   = "hide_watched";
     
     //Media types
     public final static String MEDIA_TYPE_VIDEO     = "video";

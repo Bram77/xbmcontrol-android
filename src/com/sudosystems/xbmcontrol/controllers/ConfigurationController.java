@@ -91,4 +91,21 @@ public class ConfigurationController
         
         return data.optString(key, "");
     }
+    
+    public void setHideWatchedEnabled(boolean enable)
+    {
+        Editor configurationEditor = iStorage.edit();
+        configurationEditor.putBoolean(StaticData.STORAGE_CONFIGURATION_HIDE_WATCHED, enable);
+        configurationEditor.commit();
+    }
+    
+    public void setHideWatchedEnabled()
+    {
+        setHideWatchedEnabled(true);
+    }
+    
+    public boolean isHideWatchedEnabled()
+    {
+        return iStorage.getBoolean(StaticData.STORAGE_CONFIGURATION_HIDE_WATCHED, false);
+    }
 }

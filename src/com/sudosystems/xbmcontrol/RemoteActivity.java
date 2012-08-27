@@ -60,6 +60,10 @@ public class RemoteActivity extends Activity
         {
             remote.volumeDown();
         }
+        else
+        {
+            super.dispatchKeyEvent(event);
+        }
         
         return true;
     }
@@ -78,6 +82,14 @@ public class RemoteActivity extends Activity
     {
         super.onPause();
         overridePendingTransition(0, 0);
+    }
+    
+    public void openConfigurationIntent() 
+    {
+        Intent intent = new Intent(this, ConfigurationActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        this.startActivity(intent);
+        this.finish();
     }
 
     public void remoteUp(View view)

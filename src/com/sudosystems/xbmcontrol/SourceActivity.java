@@ -26,7 +26,7 @@ public class SourceActivity extends Activity
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         
         activityParams  = getIntent().getExtras();
-        cSource         = new SourceController(this, activityParams);
+        cSource         = new SourceController(this);
         cSource.displaySources();
         
         setTitle(getResources().getString(R.string.title_global, activityParams.getString("ACTIVITY_TITLE"), activityParams.getString("ACTIVITY_TITLE").length()));
@@ -38,7 +38,6 @@ public class SourceActivity extends Activity
         getMenuInflater().inflate(R.menu.activity_source, menu);
         return true;
     }
-
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) 
@@ -74,6 +73,11 @@ public class SourceActivity extends Activity
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
         this.finish();
+    }
+    
+    public void openConfigurationIntent(MenuItem menuItem)
+    {
+        cSource.openConfigurationIntent();
     }
     
     public void displayDirectoryContent(View view)

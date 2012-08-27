@@ -20,7 +20,7 @@ import android.support.v4.app.NavUtils;
 public class SourceDirectoryActivity extends Activity 
 {
     private SourceDirectoryController cSourceDirectory;
-    private Bundle activityParams;
+    private Bundle iActivityParams;
 
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -28,11 +28,11 @@ public class SourceDirectoryActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_source_directory);
  
-        activityParams          = getIntent().getExtras();
-        cSourceDirectory        = new SourceDirectoryController(this, activityParams);
+        iActivityParams     = getIntent().getExtras();
+        cSourceDirectory    = new SourceDirectoryController(this);
         cSourceDirectory.displayDirectoryContent();
         
-        String activityTitle = getIntent().getExtras().getString("MEDIA_TYPE")+ " / " +getIntent().getExtras().getString("ACTIVITY_TITLE");
+        String activityTitle = iActivityParams.getString("MEDIA_TYPE")+ " / " +iActivityParams.getString("ACTIVITY_TITLE");
         setTitle(getResources().getString(R.string.title_empty, activityTitle, activityTitle.length()));
     }
     
@@ -52,6 +52,13 @@ public class SourceDirectoryActivity extends Activity
     public boolean onCreateOptionsMenu(Menu menu) 
     {
         getMenuInflater().inflate(R.menu.activity_source_directory, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) 
+    {
+        cSourceDirectory.prepareMenu(menu);
         return true;
     }
 
@@ -96,5 +103,22 @@ public class SourceDirectoryActivity extends Activity
     public void enqueDirectory(MenuItem menuItem)
     {
         
+    }
+    
+    public void openConfigurationIntent(MenuItem menuItem)
+    {
+        cSourceDirectory.openConfigurationIntent();
+    }
+    
+    public void hideWatchedVideos(MenuItem item)
+    {
+        cSourceDirectory.Configuration.setHideWatchedEnabled(true);
+        cSourceDirectory.openSourceDirectoryIntent();
+    }
+    
+    public void showAllVideos(MenuItem item)
+    {
+        cSourceDirectory.Configuration.setHideWatchedEnabled(false);
+        cSourceDirectory.openSourceDirectoryIntent();
     }
 }
