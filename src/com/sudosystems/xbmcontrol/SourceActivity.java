@@ -9,13 +9,14 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 
 public class SourceActivity extends Activity 
 {
-    private SourceController cSource;
+    private SourceController iController;
     private Bundle activityParams;
     
     @Override
@@ -26,8 +27,9 @@ public class SourceActivity extends Activity
         //getActionBar().setDisplayHomeAsUpEnabled(true);
         
         activityParams  = getIntent().getExtras();
-        cSource         = new SourceController(this);
-        cSource.displaySources();
+        iController         = new SourceController(this);
+        iController.displaySources();
+        iController.addNavigationToLayout();
         
         setTitle(getResources().getString(R.string.title_global, activityParams.getString("ACTIVITY_TITLE"), activityParams.getString("ACTIVITY_TITLE").length()));
     }
@@ -56,7 +58,7 @@ public class SourceActivity extends Activity
     public boolean dispatchKeyEvent(KeyEvent event)
     {
         boolean isVolumeKey = (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP);
-        return (isVolumeKey)? cSource.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
+        return (isVolumeKey)? iController.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
     }
 
     @Override
@@ -77,7 +79,7 @@ public class SourceActivity extends Activity
     
     public void openConfigurationIntent(MenuItem menuItem)
     {
-        cSource.openConfigurationIntent();
+        iController.openConfigurationIntent();
     }
     
     public void displayDirectoryContent(View view)
@@ -92,5 +94,25 @@ public class SourceActivity extends Activity
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         this.startActivity(intent);
         this.finish();
+    }
+    
+    public void openAudioIntent(View view)
+    {
+        iController.openAudioIntent();
+    }
+    
+    public void openVideoIntent(View view)
+    {
+        iController.openVideoIntent();
+    }
+    
+    public void openPicturesIntent(View view)
+    {
+        iController.openPicturesIntent();
+    }
+    
+    public void openRemoteIntent(View view)
+    {
+        iController.openRemoteIntent();
     }
 }

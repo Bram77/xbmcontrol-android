@@ -19,7 +19,7 @@ import android.support.v4.app.NavUtils;
 
 public class SourceDirectoryActivity extends Activity 
 {
-    private SourceDirectoryController cSourceDirectory;
+    private SourceDirectoryController iController;
     private Bundle iActivityParams;
 
     @Override
@@ -29,11 +29,11 @@ public class SourceDirectoryActivity extends Activity
         setContentView(R.layout.activity_source_directory);
  
         iActivityParams     = getIntent().getExtras();
-        cSourceDirectory    = new SourceDirectoryController(this);
-        cSourceDirectory.displayDirectoryContent();
-        
-        String activityTitle = iActivityParams.getString("MEDIA_TYPE")+ " / " +iActivityParams.getString("ACTIVITY_TITLE");
-        setTitle(getResources().getString(R.string.title_empty, activityTitle, activityTitle.length()));
+        iController         = new SourceDirectoryController(this);
+        iController.displayDirectoryContent();
+        iController.addNavigationToLayout();
+
+        setTitle(getResources().getString(R.string.title_empty, iActivityParams.getString("ACTIVITY_TITLE"), iActivityParams.getString("ACTIVITY_TITLE").length()));
     }
     
     @Override
@@ -41,7 +41,7 @@ public class SourceDirectoryActivity extends Activity
     {
       super.onCreateContextMenu(menu, sourceRow, menuInfo);
       
-      cSourceDirectory.setContextMenuRow((TableRow) sourceRow);
+      iController.setContextMenuRow((TableRow) sourceRow);
       TextView sourceTitle  = (TextView) ((ViewGroup) sourceRow).getChildAt(1);
       menu.setHeaderTitle("'" +sourceTitle.getText()+ "'");
       MenuInflater inflater = getMenuInflater();
@@ -58,7 +58,7 @@ public class SourceDirectoryActivity extends Activity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) 
     {
-        cSourceDirectory.prepareMenu(menu);
+        iController.prepareMenu(menu);
         return true;
     }
 
@@ -79,7 +79,7 @@ public class SourceDirectoryActivity extends Activity
     public boolean dispatchKeyEvent(KeyEvent event)
     {
         boolean isVolumeKey = (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP);
-        return (isVolumeKey)? cSourceDirectory.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
+        return (isVolumeKey)? iController.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
     }
 
     @Override
@@ -92,12 +92,12 @@ public class SourceDirectoryActivity extends Activity
     @Override
     public void onBackPressed() 
     {
-        cSourceDirectory.showDirectoryUpIntent();
+        iController.showDirectoryUpIntent();
     }
     
     public void playDirectory(MenuItem item)
     {
-        cSourceDirectory.playDirectory(item, null, 0);
+        iController.playDirectory(item, null, 0);
     }
 
     public void enqueDirectory(MenuItem menuItem)
@@ -107,18 +107,38 @@ public class SourceDirectoryActivity extends Activity
     
     public void openConfigurationIntent(MenuItem menuItem)
     {
-        cSourceDirectory.openConfigurationIntent();
+        iController.openConfigurationIntent();
     }
     
     public void hideWatchedVideos(MenuItem item)
     {
-        cSourceDirectory.Configuration.setHideWatchedEnabled(true);
-        cSourceDirectory.openSourceDirectoryIntent();
+        iController.Configuration.setHideWatchedEnabled(true);
+        iController.openSourceDirectoryIntent();
     }
     
     public void showAllVideos(MenuItem item)
     {
-        cSourceDirectory.Configuration.setHideWatchedEnabled(false);
-        cSourceDirectory.openSourceDirectoryIntent();
+        iController.Configuration.setHideWatchedEnabled(false);
+        iController.openSourceDirectoryIntent();
+    }
+    
+    public void openAudioIntent(View view)
+    {
+        iController.openAudioIntent();
+    }
+    
+    public void openVideoIntent(View view)
+    {
+        iController.openVideoIntent();
+    }
+    
+    public void openPicturesIntent(View view)
+    {
+        iController.openPicturesIntent();
+    }
+    
+    public void openRemoteIntent(View view)
+    {
+        iController.openRemoteIntent();
     }
 }

@@ -1,5 +1,11 @@
 package com.sudosystems.xbmcontrol.controllers;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -123,88 +129,91 @@ public class SourceDirectoryController extends GlobalController
             return;
         }
 
-        TableLayout sourcesTable = (TableLayout) iActivity.findViewById(R.id.table_source_directory);
-        addDirectoryUpRow(sourcesTable);
+        TableLayout sourceDirectoryTable = (TableLayout) iActivity.findViewById(R.id.table_source_directory);
+        addDirectoryUpRow(sourceDirectoryTable);
 
         for(int i=0; i < files.length(); i++)
         {
-            final int index    = i;
-            JSONObject file     = files.optJSONObject(index);
-            int track           = file.optInt("track", -1);
-            int episode         = file.optInt("episode", -1);
-            String labelPrefix  = "";
-            
-            final boolean isDirectory   = (file.optString("filetype", "").equals("directory"));
-            final boolean isMovie       = (file.optString("type", "").equals("movie"));
-            final boolean isWatched     = (file.optInt("playcount", 0) > 0);
-            final boolean isVideo       = (iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO));
-            
-            if(isWatched && isVideo && Configuration.isHideWatchedEnabled())
-            {
-                //todo
-            }
-            else
-            {
-                TableRow sourceRow          = (isDirectory)? (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null) : (TableRow) iActivity.getLayoutInflater().inflate(R.layout.file_template, null);
-                ImageView rowIcon           = (ImageView) sourceRow.getChildAt(0);
-                rowIcon.setImageResource(getMediaIcon(isDirectory, iActivityParams.getString("MEDIA_TYPE"), file.optString("type", "")));
-                
-                //Apply watched status
-                if(isWatched && iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
-                {
-                    ImageView rowWatchedIcon    = (ImageView) sourceRow.getChildAt(3);
-                    TextView rowLabel           = (TextView) sourceRow.getChildAt(1);
-                    rowWatchedIcon.setVisibility(View.VISIBLE);
-                    rowLabel.setTextColor(Color.LTGRAY);
-                }
+            addRow(i, files.optJSONObject(i), sourceDirectoryTable);
+        }
+    }
     
-                sourceRow.setOnClickListener(new OnClickListener() 
-                {
-                    public void onClick(View view) 
-                    {
-                        if(isDirectory && !isMovie)
-                        {
-                            openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), view);
-                        }
-                        else
-                        {
-                            if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
-                            {
-                                playDirectory(files.optJSONObject(index), index);
-                            }
-                            else
-                            {
-                                playFile(files.optJSONObject(index));
-                            }
-                        }
-                    }   
-                });
-                
-                sourceRow.setOnCreateContextMenuListener(iActivity);
-                
-                //Apply media prefix
-                if(!isDirectory)
-                {
-                    if(track > -1)
-                    {
-                        labelPrefix = Integer.toString(track)+". ";
-                    }
-                    
-                    if(episode > -1)
-                    {
-                        labelPrefix = Integer.toString(episode)+". ";
-                    }
-                }
+    private void addRow(int index, JSONObject file, TableLayout sourceDirectoryTable)
+    {
+        int track           = file.optInt("track", -1);
+        int episode         = file.optInt("episode", -1);
+        String labelPrefix  = "";
+        
+        final int fIndex            = index;
+        final JSONObject fFile       = file;
+        final boolean isDirectory   = (file.optString("filetype", "").equals("directory"));
+        final boolean isMovie       = (file.optString("type", "").equals("movie"));
+        final boolean isWatched     = (file.optInt("playcount", 0) > 0);
+        final boolean isVideo       = (iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO));
+        
+        if(isWatched && isVideo && Configuration.isHideWatchedEnabled())
+        {
+            return;
+        }
 
-                TextView sourceTitle    = (TextView) sourceRow.getChildAt(1);
-                sourceTitle.setText(labelPrefix+file.optString("label", "> No label specified <"));
-                
-                TextView sourcePath = (TextView) sourceRow.getChildAt(2);
-                sourcePath.setText(files.optJSONObject(index).optString("file", ""));
+        TableRow sourceRow          = (isDirectory)? (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null) : (TableRow) iActivity.getLayoutInflater().inflate(R.layout.file_template, null);
+        ImageView rowIcon           = (ImageView) sourceRow.getChildAt(0);
+        rowIcon.setImageResource(getMediaIcon(isDirectory, iActivityParams.getString("MEDIA_TYPE"), file.optString("type", "")));
+        
+        //Apply watched status
+        if(isWatched && iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
+        {
+            ImageView rowWatchedIcon    = (ImageView) sourceRow.getChildAt(3);
+            TextView rowLabel           = (TextView) sourceRow.getChildAt(1);
+            rowWatchedIcon.setVisibility(View.VISIBLE);
+            rowLabel.setTextColor(Color.LTGRAY);
+        }
+
+        sourceRow.setOnClickListener(new OnClickListener() 
+        {
+            public void onClick(View view) 
+            {
+                if(isDirectory && !isMovie)
+                {
+                    openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), view);
+                }
+                else
+                {
+                    if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
+                    {
+                        playDirectory(fFile, fIndex);
+                    }
+                    else
+                    {
+                        playFile(fFile);
+                    }
+                }
+            }
+        });
     
-                sourcesTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        sourceRow.setOnCreateContextMenuListener(iActivity);
+        
+        //Apply media prefix
+        if(!isDirectory)
+        {
+            if(track > -1)
+            {
+                labelPrefix = Integer.toString(track)+". ";
+            }
+            
+            if(episode > -1)
+            {
+                labelPrefix = Integer.toString(episode)+". ";
             }
         }
+
+        TextView sourceTitle    = (TextView) sourceRow.getChildAt(1);
+        sourceTitle.setText(labelPrefix+file.optString("label", "> No label specified <"));
+        
+        TextView sourcePath = (TextView) sourceRow.getChildAt(2);
+        sourcePath.setText(fFile.optString("file", ""));
+
+        sourceDirectoryTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
     
     private void addDirectoryUpRow(TableLayout sourcesTable)

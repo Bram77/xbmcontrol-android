@@ -38,7 +38,9 @@ public class FilesClient extends JsonRpcClient
     public void getDirectory(boolean isLibraryMode, String mediaType, String directory, JsonHttpResponseHandler responseHandler)
     {
         JSONObject params       = new JSONObject();
+        JSONArray properties    = new JSONArray();
         String mediaRequested   = (isLibraryMode)? mediaType : "files";
+        String sortMethod       = "label";
 
         try
         {
@@ -46,19 +48,25 @@ public class FilesClient extends JsonRpcClient
             {
                 params.put("media", mediaRequested);
             }
+
+            if(mediaType.equals(StaticData.MEDIA_TYPE_VIDEO))
+            {
+                properties.put("episode");
+                //sortMethod = "episode";
+            }
+            else if(mediaType.equals(StaticData.MEDIA_TYPE_AUDIO))
+            {
+                properties.put("track");
+                //sortMethod = "track";
+            }
             
             params.put("directory", directory);
             
             JSONObject sortParams = new JSONObject();
-            sortParams.put("method", "label");
+            sortParams.put("method", sortMethod);
             sortParams.put("order", "ascending");
-            
-            JSONArray properties = new JSONArray();
-            //properties.put("title");
+
             properties.put("file");
-            properties.put("track");
-            properties.put("episode");
-            //properties.put("thumbnail");
             properties.put("playcount");
             
             params.put("sort", sortParams);

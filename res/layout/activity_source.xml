@@ -1,16 +1,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:id="@+id/main_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/black_striped_background" >
 
     <TableLayout
-        android:id="@+id/table_sources"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/black_striped_background" >
+        android:layout_alignParentTop="true" >
 
+        <TableRow
+            android:id="@+id/table_sources_container"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="top"
+            android:layout_weight="9" >
+            
+            <ScrollView
+                android:id="@+id/scrollView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+	            <TableLayout
+	                android:id="@+id/table_sources"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content" >
+	
+	            </TableLayout>
+	            
+	        </ScrollView>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/navigation_container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_weight="0"
+            android:background="#111111"
+            android:gravity="bottom|center_horizontal"
+            android:padding="5dp" >
+
+        </TableRow>
     </TableLayout>
 
 </RelativeLayout>

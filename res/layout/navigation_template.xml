@@ -1,0 +1,63 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true" >
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:paddingBottom="15dp" >
+
+        <Button
+            android:id="@+id/home_music_button"
+            style="@style/ButtonTextPositve"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape_positive"
+            android:onClick="openAudioIntent"
+            android:paddingBottom="15dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:text="Music" />
+
+        <Button
+            android:id="@+id/home_video_button"
+            style="@style/ButtonTextPositve"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape_positive"
+            android:onClick="openVideoIntent"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:text="Video" />
+
+        <Button
+            android:id="@+id/home_pictures_button"
+            style="@style/ButtonTextPositve"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape_positive"
+            android:onClick="openPicturesIntent"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:text="Pictures" />
+
+        <Button
+            android:id="@+id/home_remote_button"
+            style="@style/ButtonTextPositve"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_shape_positive"
+            android:onClick="openRemoteIntent"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp"
+            android:text="Remote" />
+
+    </TableRow>
+</TableLayout>

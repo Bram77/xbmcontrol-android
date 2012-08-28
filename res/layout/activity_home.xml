@@ -1,69 +1,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/black_striped_background" >
 
     <TableLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" >
 
         <TableRow
-            android:id="@+id/tableRow1"
+            android:id="@+id/now_playing_container"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="top"
+            android:layout_weight="1" >
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/navigation_container"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:paddingBottom="15dp" >
-
-            <Button
-                android:id="@+id/home_music_button"
-                style="@style/ButtonTextPositve"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_shape_positive"
-                android:onClick="openAudioIntent"
-                android:paddingBottom="15dp"
-                android:paddingRight="10dp"
-                android:paddingTop="15dp"
-                android:text="Music" />
-
-            <Button
-                android:id="@+id/home_video_button"
-                style="@style/ButtonTextPositve"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_shape_positive"
-                android:onClick="openVideoIntent"
-                android:paddingBottom="15dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:text="Video" />
-
-            <Button
-                android:id="@+id/home_pictures_button"
-                style="@style/ButtonTextPositve"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_shape_positive"
-                android:onClick="openPicturesIntent"
-                android:paddingBottom="15dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="15dp"
-                android:text="Pictures" />
-
-            <Button
-                android:id="@+id/home_remote_button"
-                style="@style/ButtonTextPositve"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_shape_positive"
-                android:onClick="openRemoteIntent"
-                android:paddingBottom="15dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="15dp"
-                android:text="Remote" />
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_weight="0"
+            android:background="#111111"
+            android:gravity="bottom|center_horizontal"
+            android:padding="5dp" >
 
         </TableRow>
     </TableLayout>

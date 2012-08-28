@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -108,6 +109,13 @@ public class GlobalController
         .show();
     }
     
+    public void addNavigationToLayout()
+    {
+        TableRow mainLayout   = (TableRow) iActivity.findViewById(R.id.navigation_container);
+        View navigation       = iActivity.getLayoutInflater().inflate(R.layout.navigation_template, null);
+        mainLayout.addView(navigation);
+    }
+    
     public void notify(String message)
     {
         Toast.makeText(iContext, message, Toast.LENGTH_LONG).show();
@@ -185,9 +193,9 @@ public class GlobalController
     
     public void openSourceIntent(String mediaType)
     {
-        String title = mediaType.substring(0,1).toUpperCase() + mediaType.substring(1);
-        
-        Intent intent = new Intent(iContext, SourceActivity.class);
+        String title    = mediaType.substring(0,1).toUpperCase() + mediaType.substring(1);
+        Intent intent   = new Intent(iContext, SourceActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra("MEDIA_TYPE", mediaType);
         intent.putExtra("ACTIVITY_TITLE", title);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -213,7 +221,7 @@ public class GlobalController
     public void openRemoteIntent()
     {
         Intent intent = new Intent(iContext, RemoteActivity.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         iActivity.startActivity(intent);
         iActivity.finish();
     }
@@ -249,7 +257,7 @@ public class GlobalController
         }
         
         String[] aTargetPath    = lTargetPath.split("/");
-        String lTitle           = aTargetPath[(aTargetPath.length-1)];
+        String lTitle           = mediaType.substring(0,1).toUpperCase() + mediaType.substring(1)+ " / " +aTargetPath[(aTargetPath.length-1)];
         Intent intent           = new Intent(iContext, SourceDirectoryActivity.class);
         intent.putExtra("MEDIA_TYPE", mediaType);
         intent.putExtra("ROOT_PATH", rootPath);

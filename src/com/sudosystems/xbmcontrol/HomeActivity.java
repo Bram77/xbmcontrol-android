@@ -13,21 +13,22 @@ import com.sudosystems.xbmcontrol.services.NowPlayingService;
 
 public class HomeActivity extends Activity 
 {
-    private HomeController cHome;
+    private HomeController iController;
     
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        cHome = new HomeController(this);
+        iController = new HomeController(this);
+        iController.addNavigationToLayout();
         
-        if(!cHome.isConfigured())
+        if(!iController.isConfigured())
         {
-            cHome.showInitConfigurationDialog();
+            iController.showInitConfigurationDialog();
             return;
         }
         
-        //cHome.displayNowPlayingInfo();
+        //iController.displayNowPlayingInfo();
         //startService(new Intent(this, NowPlayingService.class));
     }
     
@@ -49,7 +50,7 @@ public class HomeActivity extends Activity
     public boolean dispatchKeyEvent(KeyEvent event)
     {
         boolean isVolumeKey = (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP);
-        return (isVolumeKey)? cHome.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
+        return (isVolumeKey)? iController.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
     }
     
     @Override
@@ -62,26 +63,26 @@ public class HomeActivity extends Activity
 
     public void openAudioIntent(View view)
     {
-        cHome.openAudioIntent();
+        iController.openAudioIntent();
     }
     
     public void openVideoIntent(View view)
     {
-        cHome.openVideoIntent();
+        iController.openVideoIntent();
     }
     
     public void openPicturesIntent(View view)
     {
-        cHome.openPicturesIntent();
+        iController.openPicturesIntent();
     }
     
     public void openRemoteIntent(View view)
     {
-        cHome.openRemoteIntent();
+        iController.openRemoteIntent();
     }
     
     public void openConfigurationIntent(MenuItem menuItem)
     {
-        cHome.openConfigurationIntent();
+        iController.openConfigurationIntent();
     }
 }

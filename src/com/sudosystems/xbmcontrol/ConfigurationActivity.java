@@ -12,7 +12,7 @@ import android.support.v4.app.NavUtils;
 
 public class ConfigurationActivity extends Activity 
 {
-    private ConfigurationController cConfiguration;
+    private ConfigurationController iController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -20,8 +20,8 @@ public class ConfigurationActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
         
-        cConfiguration = new ConfigurationController(this);
-        cConfiguration.loadConnectionData();
+        iController = new ConfigurationController(this);
+        iController.loadConnectionData();
     }
     
     @Override
