@@ -1,21 +1,14 @@
 package com.sudosystems.xbmcontrol.controllers;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sudosystems.xbmcontrol.R;
-import com.sudosystems.xbmcontrol.R.color;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,11 +25,13 @@ public class SourceDirectoryController extends GlobalController
     private SourceDirectoryController self;
     private TableRow iContextMenuRow    = null;
     private TableRow ioDirectoryUpRow   = null;
+    private TableLayout sourceDirectoryTable;
     
     public SourceDirectoryController(Context context)
     {
         super(context);
-        self = this;
+        self                    = this;
+        sourceDirectoryTable    = (TableLayout) iActivity.findViewById(R.id.table_source_directory);
     }
     
     public void setContextMenuRow(TableRow sourceRow)
@@ -76,7 +71,8 @@ public class SourceDirectoryController extends GlobalController
             @Override
             public void onStart()
             {
-                self.showDialog("Loading data...");
+                self.showLoadingRow(sourceDirectoryTable);
+                //self.showDialog("Loading data...");
             }
             
             @Override
@@ -97,7 +93,8 @@ public class SourceDirectoryController extends GlobalController
             @Override
             public void onFinish()
             {
-                self.hideDialog();
+                self.hideLoadingRow(sourceDirectoryTable);
+                //self.hideDialog();
             }
         });
     }
@@ -129,7 +126,6 @@ public class SourceDirectoryController extends GlobalController
             return;
         }
 
-        TableLayout sourceDirectoryTable = (TableLayout) iActivity.findViewById(R.id.table_source_directory);
         addDirectoryUpRow(sourceDirectoryTable);
 
         for(int i=0; i < files.length(); i++)

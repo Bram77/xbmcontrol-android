@@ -1,5 +1,6 @@
 package com.sudosystems.xbmcontrol.controllers;
 
+import java.io.InputStream;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -23,11 +24,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,19 +47,20 @@ public class GlobalController
     public Activity iActivity;
     public Bundle iActivityParams;
     private ProgressDialog iDialog;
-    private RemoteClient iRemote;
+    public RemoteClient Remote;
     private ScheduledExecutorService iScheduledPing;
     private ScheduledFuture<?> iPingRequest;
+    public TableRow iLoadingRow;
     
     public GlobalController(Context context)
     {
-        iRemote             = new RemoteClient();
-        iContext            = context;
-        iActivity           = (Activity) context;
-        iActivityParams     = iActivity.getIntent().getExtras();
-        Configuration       = new ConfigurationController(context);
-        iXbmc               = new XbmcClient(context, Configuration.getConnectionData());
-        
+        Remote                      = new RemoteClient();
+        iContext                    = context;
+        iActivity                   = (Activity) context;
+        iActivityParams             = iActivity.getIntent().getExtras();
+        Configuration               = new ConfigurationController(context);
+        iXbmc                       = new XbmcClient(context, Configuration.getConnectionData());
+
         startPing(StaticData.PING_INTERVAL);
     }
     
@@ -109,6 +117,43 @@ public class GlobalController
         .show();
     }
     
+    public void highlightNavigationButton()
+    {
+        Button navigationButton = null;
+        Drawable background = iActivity.getResources().getDrawable(R.drawable.button_shape_positive);
+        
+        if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
+        {
+            navigationButton = (Button) iActivity.findViewById(R.id.navigation_music);
+        }
+        else if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
+        {
+            navigationButton = (Button) iActivity.findViewById(R.id.navigation_video);
+        }
+        else if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_PICTURES))
+        {
+            navigationButton = (Button) iActivity.findViewById(R.id.navigation_pictures);
+        }
+        else
+        {
+            return;
+        }
+        
+        navigationButton.setBackgroundDrawable(background);
+        navigationButton.setTextAppearance(iContext, R.style.ButtonTextPositve);
+    }
+    
+    public void showLoadingRow(TableLayout table)
+    {
+        iLoadingRow = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.loading_template, null);
+        table.addView(iLoadingRow, new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+    }
+    
+    public void hideLoadingRow(TableLayout table)
+    {
+        table.removeView(iLoadingRow);
+    }
+    
     public void addNavigationToLayout()
     {
         TableRow mainLayout   = (TableRow) iActivity.findViewById(R.id.navigation_container);
@@ -124,22 +169,24 @@ public class GlobalController
     public void showDialog(String message)
     {
         iDialog = ProgressDialog.show(iContext, "", message, true);
+        iActivity.overridePendingTransition(0, 0);
     }
     
     public void hideDialog()
     {
         iDialog.cancel();
+        iActivity.overridePendingTransition(0, 0);
     }
     
     public boolean applyVolume(int keyCode)
     {
         if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
         {
-            iRemote.volumeUp();
+            Remote.volumeUp();
         }
         else if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
         {
-            iRemote.volumeDown();
+            Remote.volumeDown();
         }
         
         return true;
@@ -188,6 +235,7 @@ public class GlobalController
         Intent intent = new Intent(iContext, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         iActivity.startActivity(intent);
+        iActivity.overridePendingTransition(0, 0);
         iActivity.finish();
     }
     
@@ -198,8 +246,8 @@ public class GlobalController
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra("MEDIA_TYPE", mediaType);
         intent.putExtra("ACTIVITY_TITLE", title);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         iActivity.startActivity(intent);
+        iActivity.overridePendingTransition(0, 0);
         iActivity.finish();
     }
     
@@ -223,6 +271,7 @@ public class GlobalController
         Intent intent = new Intent(iContext, RemoteActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         iActivity.startActivity(intent);
+        iActivity.overridePendingTransition(0, 0);
         iActivity.finish();
     }
     
@@ -259,12 +308,13 @@ public class GlobalController
         String[] aTargetPath    = lTargetPath.split("/");
         String lTitle           = mediaType.substring(0,1).toUpperCase() + mediaType.substring(1)+ " / " +aTargetPath[(aTargetPath.length-1)];
         Intent intent           = new Intent(iContext, SourceDirectoryActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         intent.putExtra("MEDIA_TYPE", mediaType);
         intent.putExtra("ROOT_PATH", rootPath);
         intent.putExtra("CURRENT_PATH", lTargetPath);
         intent.putExtra("ACTIVITY_TITLE", lTitle);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         iActivity.startActivity(intent);
+        iActivity.overridePendingTransition(0, 0);
         iActivity.finish();
     }
 

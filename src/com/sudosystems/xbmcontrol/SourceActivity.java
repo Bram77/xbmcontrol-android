@@ -29,7 +29,8 @@ public class SourceActivity extends Activity
         activityParams  = getIntent().getExtras();
         iController         = new SourceController(this);
         iController.displaySources();
-        iController.addNavigationToLayout();
+        //iController.addNavigationToLayout();
+        iController.highlightNavigationButton();
         
         setTitle(getResources().getString(R.string.title_global, activityParams.getString("ACTIVITY_TITLE"), activityParams.getString("ACTIVITY_TITLE").length()));
     }

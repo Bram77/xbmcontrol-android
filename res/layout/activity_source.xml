@@ -3,13 +3,14 @@
     android:id="@+id/main_layout"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/black_striped_background" >
+    android:background="#000000" >
 
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:background="@drawable/black_striped_background" >
 
         <TableRow
             android:id="@+id/table_sources_container"
@@ -37,13 +38,81 @@
 
         <TableRow
             android:id="@+id/navigation_container"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_weight="0"
-            android:background="#111111"
             android:gravity="bottom|center_horizontal"
-            android:padding="5dp" >
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp" >
+            
+            <TableLayout
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content"
+			    android:layout_margin="0dp"
+			    android:layout_weight="1" >
+			
+			    <TableRow
+			        android:id="@+id/tableRow1"
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:layout_gravity="center_horizontal"
+			        android:layout_weight="1"
+			        android:gravity="center_horizontal" >
+			
+			        <Button
+			            android:id="@+id/navigation_music"
+			            style="@style/ButtonTextNegative"
+			            android:layout_width="match_parent"
+			            android:layout_height="wrap_content"
+			            android:layout_gravity="center_horizontal|center_vertical"
+			            android:layout_margin="0dp"
+			            android:layout_weight="1"
+			            android:background="@drawable/button_shape_negative"
+			            android:onClick="openAudioIntent"
+			            android:text="Music" />
+			
+			        <Button
+			            android:id="@+id/navigation_video"
+			            style="@style/ButtonTextNegative"
+			            android:layout_width="match_parent"
+			            android:layout_height="wrap_content"
+			            android:layout_gravity="center_horizontal|center_vertical"
+			            android:layout_margin="0dp"
+			            android:layout_weight="1"
+			            android:background="@drawable/button_shape_negative"
+			            android:onClick="openVideoIntent"
+			            android:text="Videos" />
+			
+			        <Button
+			            android:id="@+id/navigation_pictures"
+			            style="@style/ButtonTextNegative"
+			            android:layout_width="match_parent"
+			            android:layout_height="wrap_content"
+			            android:layout_gravity="center_horizontal|center_vertical"
+			            android:layout_margin="0dp"
+			            android:layout_weight="1"
+			            android:background="@drawable/button_shape_negative"
+			            android:onClick="openPicturesIntent"
+			            android:paddingBottom="15dp"
+			            android:paddingTop="15dp"
+			            android:text="Pictures" />
+			
+			        <Button
+			            android:id="@+id/navigation_remote"
+			            style="@style/ButtonTextNegative"
+			            android:layout_width="match_parent"
+			            android:layout_height="wrap_content"
+			            android:layout_gravity="center_horizontal|center_vertical"
+			            android:layout_margin="0dp"
+			            android:layout_weight="1"
+			            android:background="@drawable/button_shape_negative"
+			            android:onClick="openRemoteIntent"
+			            android:paddingBottom="15dp"
+			            android:text="Remote" />
+			
+			    </TableRow>
+			</TableLayout>
 
         </TableRow>
     </TableLayout>

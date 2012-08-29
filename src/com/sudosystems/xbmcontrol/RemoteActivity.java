@@ -1,10 +1,10 @@
 package com.sudosystems.xbmcontrol;
 
 import com.sudosystems.xbmc.client.RemoteClient;
+import com.sudosystems.xbmcontrol.controllers.HomeController;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +14,7 @@ import android.support.v4.app.NavUtils;
 public class RemoteActivity extends Activity
 {
     private RemoteClient remote;
+    private HomeController iController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -21,9 +22,9 @@ public class RemoteActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remote);
         
-        remote = new RemoteClient();
+        iController     = new HomeController(this);
+        String title    = getResources().getString(R.string.title_activity_remote);
         
-        String title = getResources().getString(R.string.title_activity_remote);
         setTitle(getResources().getString(R.string.title_global, title, title.length()));
     }
     
@@ -51,30 +52,13 @@ public class RemoteActivity extends Activity
     public boolean dispatchKeyEvent(KeyEvent event)
     {
         boolean isVolumeKey = (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN || event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP);
-        
-        if(isVolumeKey && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP)
-        {
-            remote.volumeUp();
-        }
-        else if(isVolumeKey && event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN)
-        {
-            remote.volumeDown();
-        }
-        else
-        {
-            super.dispatchKeyEvent(event);
-        }
-        
-        return true;
+        return (isVolumeKey)? iController.applyVolume(event.getKeyCode()) : super.dispatchKeyEvent(event) ;
     }
     
     @Override
     public void onBackPressed() 
     {
-        Intent intent = new Intent(this, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
-        this.finish();
+        iController.openHomeIntent();
     }
     
     @Override
@@ -83,57 +67,74 @@ public class RemoteActivity extends Activity
         super.onPause();
         overridePendingTransition(0, 0);
     }
-    
-    public void openConfigurationIntent() 
-    {
-        Intent intent = new Intent(this, ConfigurationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        this.startActivity(intent);
-        this.finish();
-    }
 
     public void remoteUp(View view)
     {
-        remote.up();
+        iController.Remote.up();
     }
     
     public void remoteDown(View view)
     {
-        remote.down();
+        iController.Remote.down();
     }
     
     public void remoteLeft(View view)
     {
-        remote.left();
+        iController.Remote.left();
     }
     
     public void remoteRight(View view)
     {
-        remote.right();
+        iController.Remote.right();
     }
     
     public void remoteBack(View view)
     {
-        remote.back();
+        iController.Remote.back();
     }
     
     public void remoteHome(View view)
     {
-        remote.home();
+        iController.Remote.home();
     }
     
     public void remoteContextMenu(View view)
     {
-        remote.contextMenu();
+        iController.Remote.contextMenu();
     }
     
     public void remoteInfo(View view)
     {
-        remote.info();
+        iController.Remote.info();
     }
     
     public void remoteSelect(View view)
     {
         remote.select();
+    }
+    
+    public void openAudioIntent(View view)
+    {
+        iController.openAudioIntent();
+    }
+    
+    public void openVideoIntent(View view)
+    {
+        iController.openVideoIntent();
+    }
+    
+    public void openPicturesIntent(View view)
+    {
+        iController.openPicturesIntent();
+    }
+    
+    public void openRemoteIntent(View view)
+    {
+        iController.openRemoteIntent();
+    }
+    
+    public void openConfigurationIntent(MenuItem menuItem)
+    {
+        iController.openConfigurationIntent();
     }
 }

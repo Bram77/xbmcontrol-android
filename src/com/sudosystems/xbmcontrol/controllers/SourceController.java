@@ -17,11 +17,13 @@ import com.sudosystems.xbmcontrol.R;
 public class SourceController extends GlobalController
 {
     private SourceController self;
+    private TableLayout sourcesTable;
     
     public SourceController(Context context)
     {
         super(context);
-        self = this;
+        self            = this;
+        sourcesTable    = (TableLayout) iActivity.findViewById(R.id.table_sources);
     }
     
     public void displaySources()
@@ -31,7 +33,8 @@ public class SourceController extends GlobalController
             @Override
             public void onStart()
             {
-                self.showDialog("Loading data...");
+                self.showLoadingRow(sourcesTable);
+                //self.showDialog("Loading data...");
             }
             
             @Override
@@ -50,7 +53,8 @@ public class SourceController extends GlobalController
             @Override
             public void onFinish()
             {
-                self.hideDialog();
+                self.hideLoadingRow(sourcesTable);
+                //self.hideDialog();
             }
         });
     }
@@ -63,8 +67,7 @@ public class SourceController extends GlobalController
         {
             return;
         }
-        
-        TableLayout sourcesTable    = (TableLayout) iActivity.findViewById(R.id.table_sources);
+
         JSONArray sources           = result.optJSONArray("sources");
 
         if(sources == null || sources.length() < 1)

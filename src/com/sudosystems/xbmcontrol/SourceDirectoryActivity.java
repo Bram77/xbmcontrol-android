@@ -31,7 +31,8 @@ public class SourceDirectoryActivity extends Activity
         iActivityParams     = getIntent().getExtras();
         iController         = new SourceDirectoryController(this);
         iController.displayDirectoryContent();
-        iController.addNavigationToLayout();
+        //iController.addNavigationToLayout();
+        iController.highlightNavigationButton();
 
         setTitle(getResources().getString(R.string.title_empty, iActivityParams.getString("ACTIVITY_TITLE"), iActivityParams.getString("ACTIVITY_TITLE").length()));
     }

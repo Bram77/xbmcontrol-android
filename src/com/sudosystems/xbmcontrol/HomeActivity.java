@@ -20,7 +20,7 @@ public class HomeActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         iController = new HomeController(this);
-        iController.addNavigationToLayout();
+        //iController.addNavigationToLayout();
         
         if(!iController.isConfigured())
         {
