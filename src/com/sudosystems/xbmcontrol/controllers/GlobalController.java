@@ -1,14 +1,5 @@
 package com.sudosystems.xbmcontrol.controllers;
 
-import java.io.InputStream;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
-import org.json.JSONObject;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.sudosystems.xbmc.client.RemoteClient;
 import com.sudosystems.xbmc.client.XbmcClient;
 import com.sudosystems.xbmcontrol.HomeActivity;
@@ -19,21 +10,15 @@ import com.sudosystems.xbmcontrol.SourceActivity;
 import com.sudosystems.xbmcontrol.SourceDirectoryActivity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -48,8 +33,6 @@ public class GlobalController
     public Bundle iActivityParams;
     private ProgressDialog iDialog;
     public RemoteClient Remote;
-    private ScheduledExecutorService iScheduledPing;
-    private ScheduledFuture<?> iPingRequest;
     public TableRow iLoadingRow;
     
     public GlobalController(Context context)
@@ -60,61 +43,6 @@ public class GlobalController
         iActivityParams             = iActivity.getIntent().getExtras();
         Configuration               = new ConfigurationController(context);
         iXbmc                       = new XbmcClient(context, Configuration.getConnectionData());
-
-        startPing(StaticData.PING_INTERVAL);
-    }
-    
-    private void startPing(int interval)
-    {
-        iScheduledPing  = Executors.newScheduledThreadPool(5);
-        iPingRequest    = iScheduledPing.scheduleAtFixedRate(new Runnable() 
-        {
-            public void run() 
-            {
-                iXbmc.System.ping(new JsonHttpResponseHandler()
-                {
-                    @Override
-                    public void onSuccess(JSONObject response)
-                    {
-                        if(response == null || !response.optString("result").equals("pong"))
-                        {
-                            showConnectionLostDialog();
-                        }
-                    }
-                    
-                    @Override
-                    public void onFailure(Throwable e, String response) 
-                    {
-                        showConnectionLostDialog();
-                    }
-                });
-            }
-        }, 0, interval, TimeUnit.SECONDS);
-    }
-    
-    private void showConnectionLostDialog()
-    {
-        new AlertDialog.Builder(iContext)
-        .setIcon(android.R.drawable.ic_dialog_alert)
-        .setTitle("Connection error")
-        .setMessage("Unable to connect with XBMC. Do you wish to change your settings?")
-        .setPositiveButton("OK", new DialogInterface.OnClickListener() 
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                openConfigurationIntent();    
-            }
-
-        })
-        .setNegativeButton("Reconnect", new DialogInterface.OnClickListener() 
-        {
-            public void onClick(DialogInterface dialog, int which)
-            {
-                openHomeIntent();    
-            }
-
-        })
-        .show();
     }
     
     public void highlightNavigationButton()

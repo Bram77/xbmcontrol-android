@@ -1,5 +1,6 @@
 package com.sudosystems.xbmc.client;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,7 +11,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class VideoLibraryClient  extends JsonRpcClient
 {
-    private static final String NAMESPACE = "AudioLibrary.";
+    private static final String NAMESPACE = "VideoLibrary.";
     
     public VideoLibraryClient(Context context, Configuration configuration)
     {
@@ -49,5 +50,64 @@ public class VideoLibraryClient  extends JsonRpcClient
         }
         
         post(NAMESPACE+ "GetEpisodeDetails", params, responseHandler);
+    }
+    
+    public void GetRecentlyAddedEpisodes(JsonHttpResponseHandler responseHandler)
+    {
+        JSONObject params       = new JSONObject();
+        JSONObject limits       = new JSONObject();
+        JSONArray properties    = new JSONArray();
+
+        try
+        {
+            limits.put("start", 0);
+            limits.put("end", 1);
+            
+            //properties.put("title");
+            //properties.put("season");
+            //properties.put("episode");
+            properties.put("showtitle");
+            properties.put("playcount");
+            properties.put("thumbnail");
+            
+            params.put("limits", limits);
+            params.put("properties", properties);
+        }
+        catch(JSONException e)
+        {
+            Log.v("VideoLibraryClient::getEpisodeDetails", e.getMessage());
+            e.printStackTrace();
+        }
+        
+        post(NAMESPACE+ "GetRecentlyAddedEpisodes", params, responseHandler);
+    }
+    
+    public void GetRecentlyAddedMovies(JsonHttpResponseHandler responseHandler)
+    {
+        JSONObject params       = new JSONObject();
+        JSONObject limits       = new JSONObject();
+        JSONArray properties    = new JSONArray();
+
+        try
+        {
+            limits.put("start", 0);
+            limits.put("end", 1);
+            
+            //properties.put("title");
+            properties.put("playcount");
+            properties.put("thumbnail");
+            //properties.put("imdbnumber");
+            //properties.put("trailer");
+            
+            params.put("limits", limits);
+            params.put("properties", properties);
+        }
+        catch(JSONException e)
+        {
+            Log.v("VideoLibraryClient::getEpisodeDetails", e.getMessage());
+            e.printStackTrace();
+        }
+        
+        post(NAMESPACE+ "GetRecentlyAddedMovies", params, responseHandler);
     }
 }

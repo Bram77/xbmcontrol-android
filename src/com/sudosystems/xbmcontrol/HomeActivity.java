@@ -7,26 +7,33 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.sudosystems.xbmcontrol.controllers.HomeController;
+import com.sudosystems.xbmcontrol.controllers.RecentlyAddedController;
 import com.sudosystems.xbmcontrol.services.NowPlayingService;
 
 public class HomeActivity extends Activity 
 {
     private HomeController iController;
+    private RecentlyAddedController iRecentlyAddedController;
     
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        iController = new HomeController(this);
-        //iController.addNavigationToLayout();
-        
+        iController                 = new HomeController(this);
+        iRecentlyAddedController    = new RecentlyAddedController(this);
+
         if(!iController.isConfigured())
         {
             iController.showInitConfigurationDialog();
             return;
         }
+        
+        iRecentlyAddedController.showMovies((LinearLayout) this.findViewById(R.id.recently_added_movies_container));
+        iRecentlyAddedController.showEpisodes((LinearLayout) this.findViewById(R.id.recently_added_episodes_container));
+        iRecentlyAddedController.showAlbums((LinearLayout) this.findViewById(R.id.recently_added_albums_container));
         
         //iController.displayNowPlayingInfo();
         //startService(new Intent(this, NowPlayingService.class));

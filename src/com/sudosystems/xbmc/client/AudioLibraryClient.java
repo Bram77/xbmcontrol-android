@@ -1,5 +1,6 @@
 package com.sudosystems.xbmc.client;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,5 +33,34 @@ public class AudioLibraryClient  extends JsonRpcClient
         }
         
         post(NAMESPACE+ "GetSongDetails", params, responseHandler);
+    }
+    
+    public void GetRecentlyAddedAlbums(JsonHttpResponseHandler responseHandler)
+    {
+        JSONObject params       = new JSONObject();
+        JSONObject limits       = new JSONObject();
+        JSONArray properties    = new JSONArray();
+
+        try
+        {
+            limits.put("start", 0);
+            limits.put("end", 3);
+            
+            //properties.put("title");
+            properties.put("artist");
+            properties.put("thumbnail");
+            //properties.put("type");
+            //properties.put("artistid");
+            
+            params.put("limits", limits);
+            params.put("properties", properties);
+        }
+        catch(JSONException e)
+        {
+            Log.v("VideoLibraryClient::getEpisodeDetails", e.getMessage());
+            e.printStackTrace();
+        }
+        
+        post(NAMESPACE+ "GetRecentlyAddedAlbums", params, responseHandler);
     }
 }

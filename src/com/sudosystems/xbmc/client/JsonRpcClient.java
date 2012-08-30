@@ -36,6 +36,8 @@ public class JsonRpcClient
     {
         JSONObject rpcParams = buildRpcObject(method, params);
         
+        Log.d("POST PARAMS", rpcParams.toString());
+        
         StringEntity oRawPostParams;
         
         try

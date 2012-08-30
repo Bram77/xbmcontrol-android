@@ -31,7 +31,7 @@ import android.util.Log;
  * PacketPING or XBMCClient.ping(). See the documentation for details.
  * </p>
  * <p>
- * Base class that implements a single event packet.
+ * UtilBase class that implements a single event packet.
  * - Generic packet structure (maximum 1024 bytes per packet)
  * - Header is 32 bytes long, so 992 bytes available for payload
  * - large payloads can be split into multiple packets using H4 and H5
