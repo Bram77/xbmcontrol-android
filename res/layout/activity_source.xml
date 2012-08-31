@@ -11,6 +11,19 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/black_striped_background" >
+        
+        <TableRow
+            android:id="@+id/playback_controls_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <include
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                layout="@layout/playback_controls_template" />
+
+        </TableRow>
 
         <TableRow
             android:id="@+id/table_sources_container"

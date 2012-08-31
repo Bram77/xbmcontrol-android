@@ -25,7 +25,7 @@ public class HomeActivity extends Activity
         setContentView(R.layout.activity_home);
         iController                 = new HomeController(this);
         iRecentlyAddedController    = new RecentlyAddedController(this);
-
+        
         if(!iController.isConfigured())
         {
             iController.showInitConfigurationDialog();
@@ -92,5 +92,36 @@ public class HomeActivity extends Activity
     public void openConfigurationIntent(MenuItem menuItem)
     {
         iController.openConfigurationIntent();
+    }
+    
+    //Playback controls
+    public void playbackPrevious(View view)
+    {
+        iController.Remote.playbackPrevious();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void playbackPause(View view)
+    {
+        iController.Remote.playbackPause();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void playbackStart(View view)
+    {
+        iController.Remote.playbackStart();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void playbackStop(View view)
+    {
+        iController.Remote.playbackStop();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void playbackNext(View view)
+    {
+        iController.Remote.playbackNext();
+        iController.iVibrator.vibrate(30);
     }
 }

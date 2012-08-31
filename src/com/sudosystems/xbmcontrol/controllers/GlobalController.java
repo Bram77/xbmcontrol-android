@@ -15,9 +15,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -34,6 +37,9 @@ public class GlobalController
     private ProgressDialog iDialog;
     public RemoteClient Remote;
     public TableRow iLoadingRow;
+    protected Animation iFadeInAnimation;
+    protected Animation iFadeOutAnimation;
+    public Vibrator iVibrator;
     
     public GlobalController(Context context)
     {
@@ -43,6 +49,10 @@ public class GlobalController
         iActivityParams             = iActivity.getIntent().getExtras();
         Configuration               = new ConfigurationController(context);
         iXbmc                       = new XbmcClient(context, Configuration.getConnectionData());
+        iFadeInAnimation            = AnimationUtils.loadAnimation(iContext, R.anim.fade_in);
+        iFadeOutAnimation           = AnimationUtils.loadAnimation(iContext, R.anim.fade_out);
+        iVibrator                   = (Vibrator) iActivity.getSystemService(Context.VIBRATOR_SERVICE); 
+        iLoadingRow                 = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.loading_template, null);
     }
     
     public void highlightNavigationButton()
@@ -73,12 +83,13 @@ public class GlobalController
     
     public void showLoadingRow(TableLayout table)
     {
-        iLoadingRow = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.loading_template, null);
         table.addView(iLoadingRow, new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        iLoadingRow.startAnimation(iFadeInAnimation);
     }
     
     public void hideLoadingRow(TableLayout table)
     {
+        iLoadingRow.startAnimation(iFadeOutAnimation);
         table.removeView(iLoadingRow);
     }
     

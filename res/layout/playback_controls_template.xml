@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center_horizontal" >
+
+    <ImageButton
+        android:id="@+id/playback_previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:background="@drawable/button_shape_negative"
+        android:onClick="playbackPrevious"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:src="@drawable/playback_previous_48" />
+
+    <ImageButton
+        android:id="@+id/playback_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:background="@drawable/button_shape_positive"
+        android:onClick="playbackPause"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:src="@drawable/playback_pause_48"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/playback_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:background="@drawable/button_shape_positive"
+        android:onClick="playbackStart"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:src="@drawable/playback_start_48" />
+
+    <ImageButton
+        android:id="@+id/playback_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:background="@drawable/button_shape_negative"
+        android:onClick="playbackStop"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:src="@drawable/playback_stop_48" />
+
+    <ImageButton
+        android:id="@+id/playback_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:background="@drawable/button_shape_negative"
+        android:onClick="playbackNext"
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp"
+        android:src="@drawable/playback_next_48" />
+
+</LinearLayout>

@@ -79,6 +79,32 @@ public class RemoteClient extends AsyncTask<Object, Object, Object>
     {
         eventClient.sendButton("R1", ButtonCodes.REMOTE_VOLUME_MINUS, false, true, true, (short)0, (byte)0);
     }
+    
+    //Playback controls
+    public void playbackPrevious()
+    {
+        eventClient.sendButton("R1", ButtonCodes.REMOTE_SKIP_MINUS, false, true, true, (short)0, (byte)0);
+    }
+    
+    public void playbackPause()
+    {
+        eventClient.sendButton("R1", ButtonCodes.REMOTE_PAUSE, false, true, true, (short)0, (byte)0);
+    }
+    
+    public void playbackStart()
+    {
+        eventClient.sendButton("R1", ButtonCodes.REMOTE_PLAY, false, true, true, (short)0, (byte)0);
+    }
+    
+    public void playbackStop()
+    {
+        eventClient.sendButton("R1", ButtonCodes.REMOTE_STOP, false, true, true, (short)0, (byte)0);
+    }
+    
+    public void playbackNext()
+    {
+        eventClient.sendButton("R1", ButtonCodes.REMOTE_SKIP_PLUS, false, true, true, (short)0, (byte)0);
+    }
 
     @Override
     protected Object doInBackground(Object... params)

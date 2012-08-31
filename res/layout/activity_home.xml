@@ -6,11 +6,43 @@
     android:background="#000000" >
 
     <TableLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/black_striped_background" >
+
+        <TableRow
+            android:id="@+id/playback_controls_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <include
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                layout="@layout/playback_controls_template" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="3dp"
+                android:text=".: RECENTLY ADDED :."
+                android:textColor="#AAAAAA"
+                android:textSize="12dp"
+                android:textStyle="bold" />
+
+        </TableRow>
 
         <TableRow
             android:id="@+id/recently_added_container"
@@ -106,6 +138,54 @@
 
                 </TableRow>
             </TableLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_weight="0.33"
+                    android:text="MOVIES"
+                    android:textColor="#666666"
+                    android:textSize="10dp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:ellipsize="none"
+                    android:text="EPISODES"
+                    android:textColor="#666666"
+                    android:textSize="10dp"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/textView5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.33"
+                    android:text="ALBUMS"
+                    android:textColor="#666666"
+                    android:textSize="10dp"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+            </LinearLayout>
 
         </TableRow>
 

@@ -39,7 +39,7 @@
         android:contentDescription="TODO"
         android:paddingLeft="5dp"
         android:paddingRight="10dp"
-        android:src="@drawable/checked_32"
+        android:src="@drawable/watched_32"
         android:visibility="gone" />
 
 </TableRow>

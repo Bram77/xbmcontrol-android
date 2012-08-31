@@ -14,18 +14,14 @@ import com.sudosystems.utilities.*;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 public class RecentlyAddedController extends GlobalController
 {
     private ImageUtils imageUtils = new ImageUtils();
-    
+
     public RecentlyAddedController(Context context)
     {
         super(context);
@@ -196,7 +192,7 @@ public class RecentlyAddedController extends GlobalController
 
                             if(imageFile != null && imageFile instanceof Bitmap)
                             {
-                                Bitmap scaledImage = imageUtils.getScaledImage(imageFile, 200, 120);
+                                Bitmap scaledImage = imageUtils.getScaledImage(imageFile, 200, 200);
                                 final ImageView movieThumb = (ImageView) iTemplate.getChildAt(1);
                                 movieThumb.setImageBitmap(scaledImage);
                             }
@@ -210,9 +206,6 @@ public class RecentlyAddedController extends GlobalController
                 
                 target.addView(iTemplate);
             }
-            
-            Animation fadeInAnimation = AnimationUtils.loadAnimation(iContext, R.anim.fade_in);
-            target.startAnimation(fadeInAnimation);
         }
     }
 

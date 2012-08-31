@@ -137,4 +137,35 @@ public class RemoteActivity extends Activity
     {
         iController.openConfigurationIntent();
     }
+    
+    //Playback controls
+    public void playbackPrevious(View view)
+    {
+        iController.Remote.playbackPrevious();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void playbackPause(View view)
+    {
+        iController.Remote.playbackPause();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void playbackStart(View view)
+    {
+        iController.Remote.playbackStart();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void playbackStop(View view)
+    {
+        iController.Remote.playbackStop();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void playbackNext(View view)
+    {
+        iController.Remote.playbackNext();
+        iController.iVibrator.vibrate(30);
+    }
 }
