@@ -4,25 +4,39 @@
     android:onClick="displayDirectoryContent" >
 
     <ImageView
+        android:id="@+id/content_icon"
         style="@style/DefaultDirectoryRowIcon"
         android:layout_gravity="left"
         android:contentDescription="TODO"
+        android:paddingRight="10dp"
         android:src="@drawable/folder_64" />
-    
-    <TextView 
-        style="@style/DefaultDirectoryTitle" 
-        android:layout_width="wrap_content"
+
+    <TextView
+        android:id="@+id/content_label"
+        style="@style/DefaultDirectoryTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:ellipsize="end"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textSize="14dp"
         android:textStyle="normal" />
     
-    <TextView style="@style/DefaultDirectorySource" />
+    <TextView
+        android:id="@+id/content_path"
+        style="@style/DefaultDirectorySource" />
     
     <ImageView
-        android:id="@+id/imageView2"
-        android:contentDescription="TODO"
+        android:id="@+id/content_watched_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center_vertical"
+        android:contentDescription="TODO"
         android:paddingLeft="5dp"
         android:paddingRight="10dp"
         android:src="@drawable/checked_32"

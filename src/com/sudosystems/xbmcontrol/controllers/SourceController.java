@@ -68,7 +68,7 @@ public class SourceController extends GlobalController
             return;
         }
 
-        JSONArray sources           = result.optJSONArray("sources");
+        JSONArray sources = result.optJSONArray("sources");
 
         if(sources == null || sources.length() < 1)
         {
@@ -82,14 +82,12 @@ public class SourceController extends GlobalController
         {
             String currentMediaType = iActivityParams.getString("MEDIA_TYPE");
             TableRow sourceRow      = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null);
+            ImageView rowIcon       = (ImageView) sourceRow.findViewById(R.id.content_icon);
+            TextView sourceTitle    = (TextView) sourceRow.findViewById(R.id.content_label);
+            TextView sourcePath     = (TextView) sourceRow.findViewById(R.id.content_path);
             
-            ImageView rowIcon = (ImageView) sourceRow.getChildAt(0);
             rowIcon.setImageResource(getMediaIcon(true, currentMediaType));
-
-            TextView sourceTitle = (TextView) sourceRow.getChildAt(1);
             sourceTitle.setText(sources.optJSONObject(i).optString("label", "No label specified"));
-            
-            TextView sourcePath = (TextView) sourceRow.getChildAt(2);
             sourcePath.setText(sources.optJSONObject(i).optString("file", ""));
             
             sourcesTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));

@@ -40,7 +40,7 @@ public class FilesClient extends JsonRpcClient
         JSONObject params       = new JSONObject();
         JSONArray properties    = new JSONArray();
         String mediaRequested   = (isLibraryMode)? mediaType : "files";
-        String sortMethod       = "label";
+        String sortMethod       = "file";
 
         try
         {

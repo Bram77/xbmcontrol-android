@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.sudosystems.utilities.StringUtils;
 import com.sudosystems.xbmcontrol.R;
 
 import android.content.Context;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -134,14 +136,12 @@ public class SourceDirectoryController extends GlobalController
         }
     }
     
-    private void addRow(int index, JSONObject file, TableLayout sourceDirectoryTable)
+    private void addRow(int index, final JSONObject file, TableLayout sourceDirectoryTable)
     {
-        int track           = file.optInt("track", -1);
-        int episode         = file.optInt("episode", -1);
-        String labelPrefix  = "";
-        
+        int episode                  = file.optInt("episode", -1);
+        String labelPrefix           = "";
+        String sourceName            = "";
         final int fIndex            = index;
-        final JSONObject fFile       = file;
         final boolean isDirectory   = (file.optString("filetype", "").equals("directory"));
         final boolean isMovie       = (file.optString("type", "").equals("movie"));
         final boolean isWatched     = (file.optInt("playcount", 0) > 0);
@@ -153,17 +153,43 @@ public class SourceDirectoryController extends GlobalController
         }
 
         TableRow sourceRow          = (isDirectory)? (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null) : (TableRow) iActivity.getLayoutInflater().inflate(R.layout.file_template, null);
-        ImageView rowIcon           = (ImageView) sourceRow.getChildAt(0);
-        rowIcon.setImageResource(getMediaIcon(isDirectory, iActivityParams.getString("MEDIA_TYPE"), file.optString("type", "")));
+        ImageView rowIcon           = (ImageView) sourceRow.findViewById(R.id.content_icon);
+        TextView rowLabel           = (TextView) sourceRow.findViewById(R.id.content_label);
+        TextView sourcePath         = (TextView) sourceRow.findViewById(R.id.content_path);
+        ImageView rowWatchedIcon    = (ImageView) sourceRow.findViewById(R.id.content_watched_icon);
         
-        //Apply watched status
-        if(isWatched && iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
+        rowIcon.setImageResource(getMediaIcon(isDirectory, iActivityParams.getString("MEDIA_TYPE"), file.optString("type", "")));
+        sourceRow.setOnCreateContextMenuListener(iActivity);
+        
+        if(!isDirectory)
         {
-            ImageView rowWatchedIcon    = (ImageView) sourceRow.getChildAt(3);
-            TextView rowLabel           = (TextView) sourceRow.getChildAt(1);
-            rowWatchedIcon.setVisibility(View.VISIBLE);
-            rowLabel.setTextColor(Color.LTGRAY);
+            //Apply watched status
+            if(isWatched && iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
+            {
+                rowWatchedIcon.setVisibility(View.VISIBLE);
+                rowLabel.setTextColor(Color.LTGRAY);
+            }
         }
+        
+        if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
+        {
+            sourceName = (isDirectory)? StringUtils.getDirectoryNameFormUrl(file.optString("file", "")) : StringUtils.getFileNameFormUrl(file.optString("file", ""), true);
+        }
+        else
+        {
+            if(isDirectory)
+            {
+                sourceName = file.optString("label", "");
+            }
+            else if(episode > -1) //prepend episode if tvshow
+            {
+                labelPrefix = Integer.toString(episode)+ ". ";
+                sourceName  = labelPrefix+file.optString("label", "");
+            }
+        }
+
+        rowLabel.setText(sourceName);
+        sourcePath.setText(file.optString("file", ""));
 
         sourceRow.setOnClickListener(new OnClickListener() 
         {
@@ -177,44 +203,30 @@ public class SourceDirectoryController extends GlobalController
                 {
                     if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
                     {
-                        playDirectory(fFile, fIndex);
+                        playDirectory(file, fIndex);
                     }
                     else
                     {
-                        playFile(fFile);
+                        playFile(file);
                     }
                 }
             }
         });
-    
-        sourceRow.setOnCreateContextMenuListener(iActivity);
-        
-        //Apply media prefix
-        if(!isDirectory)
-        {
-            if(track > -1)
-            {
-                labelPrefix = Integer.toString(track)+". ";
-            }
-            
-            if(episode > -1)
-            {
-                labelPrefix = Integer.toString(episode)+". ";
-            }
-        }
-
-        TextView sourceTitle    = (TextView) sourceRow.getChildAt(1);
-        sourceTitle.setText(labelPrefix+file.optString("label", "> No label specified <"));
-        
-        TextView sourcePath = (TextView) sourceRow.getChildAt(2);
-        sourcePath.setText(fFile.optString("file", ""));
 
         sourceDirectoryTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
     
     private void addDirectoryUpRow(TableLayout sourcesTable)
     {
-        ioDirectoryUpRow = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null);
+        ioDirectoryUpRow        = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null);
+        ImageView rowIcon       = (ImageView) ioDirectoryUpRow.findViewById(R.id.content_icon);
+        TextView rowTitle       = (TextView) ioDirectoryUpRow.findViewById(R.id.content_label);
+        TextView rowPath        = (TextView) ioDirectoryUpRow.findViewById(R.id.content_path);
+        
+        rowIcon.setImageResource(R.drawable.folder_open_64);
+        rowTitle.setText("..");
+        rowPath.setText(Util.getOneDirectoryUp(iActivityParams.getString("CURRENT_PATH")));
+        
         ioDirectoryUpRow.setOnClickListener(new OnClickListener() 
         {
             public void onClick(View view) 
@@ -222,16 +234,7 @@ public class SourceDirectoryController extends GlobalController
                 openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), view);
             }   
         });
-        
-        ImageView rowIcon = (ImageView) ioDirectoryUpRow.getChildAt(0);
-        rowIcon.setImageResource(R.drawable.folder_open_64);
-        
-        TextView sourceTitle = (TextView) ioDirectoryUpRow.getChildAt(1);
-        sourceTitle.setText("..");
-        
-        TextView sourcePath = (TextView) ioDirectoryUpRow.getChildAt(2);
-        sourcePath.setText(Util.getOneDirectoryUp(iActivityParams.getString("CURRENT_PATH")));
-        
+
         sourcesTable.addView(ioDirectoryUpRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
  
@@ -260,9 +263,9 @@ public class SourceDirectoryController extends GlobalController
         
         if(fileData == null)
         {
-            final TextView sourceTitle = (TextView) iContextMenuRow.getChildAt(1);
+            final TextView sourceTitle = (TextView) iContextMenuRow.findViewById(R.id.content_label);
             title                       = sourceTitle.getText().toString();
-            TextView sourcePath         = (TextView) iContextMenuRow.getChildAt(2);
+            TextView sourcePath         = (TextView) iContextMenuRow.findViewById(R.id.content_path);
             path                        = sourcePath.getText().toString();
         }
         else
