@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TableRow;
 
 import com.sudosystems.xbmcontrol.controllers.HomeController;
 import com.sudosystems.xbmcontrol.controllers.RecentlyAddedController;

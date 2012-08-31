@@ -61,7 +61,7 @@ public class VideoLibraryClient  extends JsonRpcClient
         try
         {
             limits.put("start", 0);
-            limits.put("end", 1);
+            limits.put("end", 4);
             
             //properties.put("title");
             //properties.put("season");
@@ -91,12 +91,12 @@ public class VideoLibraryClient  extends JsonRpcClient
         try
         {
             limits.put("start", 0);
-            limits.put("end", 1);
+            limits.put("end", 4);
             
             //properties.put("title");
             properties.put("playcount");
             properties.put("thumbnail");
-            //properties.put("imdbnumber");
+            properties.put("rating");
             //properties.put("trailer");
             
             params.put("limits", limits);

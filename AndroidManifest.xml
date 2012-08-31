@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".HomeActivity"
-            android:label="@string/title_activity_home" >
+            android:label="@string/title_activity_home"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,21 +26,24 @@
         </activity>
         <activity
             android:name=".RemoteActivity"
-            android:label="@string/title_activity_remote" >
+            android:label="@string/title_activity_remote"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sudosystems.xbmcontrol.HomeActivity" />
         </activity>
         <activity
             android:name=".SourceActivity"
-            android:label="@string/title_activity_source" >
+            android:label="@string/title_activity_source"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sudosystems.xbmcontrol.HomeActivity" />
         </activity>
         <activity
             android:name=".SourceDirectoryActivity"
-            android:label="@string/title_activity_source_directory" >
+            android:label="@string/title_activity_source_directory"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sudosystems.xbmcontrol.SourceActivity" />
@@ -52,7 +56,8 @@
 
         <activity
             android:name=".ConfigurationActivity"
-            android:label="@string/title_activity_configuration" >
+            android:label="@string/title_activity_configuration"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sudosystems.xbmcontrol.HomeActivity" />

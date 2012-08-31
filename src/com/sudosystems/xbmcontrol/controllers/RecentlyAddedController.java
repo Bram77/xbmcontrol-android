@@ -14,13 +14,17 @@ import com.sudosystems.utilities.*;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class RecentlyAddedController extends GlobalController
 {
-    ImageUtils imageUtils = new ImageUtils();
+    private ImageUtils imageUtils = new ImageUtils();
     
     public RecentlyAddedController(Context context)
     {
@@ -141,26 +145,47 @@ public class RecentlyAddedController extends GlobalController
         });
     }
     
-    private void handleResult(String mediaType, LinearLayout target, JSONObject result)
+    private void handleResult(final String mediaType, final LinearLayout target, JSONObject result)
     {
-        JSONArray movies    = result.optJSONArray(mediaType);
-        int itemLimit       = 1;
-        int itemCount       = (result.length() < itemLimit)? result.length() : itemLimit;
+        JSONArray media = result.optJSONArray(mediaType);
         
-        if(movies != null && movies.length() > 0)
+        if(media != null && media.length() > 0)
         {
-            for(int i=0; i<itemCount; i++)
+            final int maxItems = 3;
+            int limit           = (media.length() > maxItems)? maxItems : media.length();
+            
+            for(int i=0; i<limit; i++)
             {
-                JSONObject movie            = movies.optJSONObject(i);
-                LinearLayout iTemplate      = (LinearLayout) iActivity.getLayoutInflater().inflate(R.layout.recently_add_movie_template, null);
-                TextView movieTitle         = (TextView) iTemplate.getChildAt(1);
-                final ImageView movieThumb = (ImageView) iTemplate.getChildAt(0);
-                String thumbUrl             = movie.optString("thumbnail", "");
-                
-                movieTitle.setText(movie.optString("label", "No title provided"));
-                
-                String cleanUrl = getThumbUrl(thumbUrl);
+                JSONObject item                 = media.optJSONObject(i);
+                final LinearLayout iTemplate   = (LinearLayout) iActivity.getLayoutInflater().inflate(R.layout.recently_add_movie_template, null);
+                TextView itemTitle              = (TextView) iTemplate.getChildAt(0);
+                TextView itemExtraInfo          = (TextView) iTemplate.getChildAt(2);
+                String thumbUrl                 = item.optString("thumbnail", "");
+                String cleanUrl                 = getThumbUrl(thumbUrl);
+                String title                    = "";
+                String extraInfo                = "";
 
+                if(mediaType.equals("movies"))
+                {
+                    title       = item.optString("label", "");
+                    extraInfo   = item.optString("rating", "");
+                    extraInfo   = "rating "+extraInfo.substring(0,3); 
+                }
+                else if(mediaType.equals("episodes"))
+                {
+                    title       = item.optString("showtitle", "");
+                    extraInfo   = item.optString("label", "");
+                }
+                else if(mediaType.equals("albums"))
+                {
+                    JSONArray artists   = item.optJSONArray("artist");
+                    title               = (artists.length() > 0)? artists.optString(0) : "";
+                    extraInfo           = item.optString("label", "");
+                }
+                
+                itemTitle.setText(title);
+                itemExtraInfo.setText(extraInfo);
+ 
                 if(cleanUrl != null && StringUtils.isValidWebUrl(cleanUrl))
                 {
                     new ImageDownload(cleanUrl, new DownloadCompleteListener()
@@ -171,7 +196,8 @@ public class RecentlyAddedController extends GlobalController
 
                             if(imageFile != null && imageFile instanceof Bitmap)
                             {
-                                Bitmap scaledImage = imageUtils.getScaledImage(imageFile, 200, 200);
+                                Bitmap scaledImage = imageUtils.getScaledImage(imageFile, 200, 120);
+                                final ImageView movieThumb = (ImageView) iTemplate.getChildAt(1);
                                 movieThumb.setImageBitmap(scaledImage);
                             }
                             else
@@ -184,6 +210,9 @@ public class RecentlyAddedController extends GlobalController
                 
                 target.addView(iTemplate);
             }
+            
+            Animation fadeInAnimation = AnimationUtils.loadAnimation(iContext, R.anim.fade_in);
+            target.startAnimation(fadeInAnimation);
         }
     }
 
