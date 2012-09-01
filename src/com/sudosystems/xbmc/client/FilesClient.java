@@ -90,4 +90,22 @@ public class FilesClient extends JsonRpcClient
     {
         getDirectory(null, directory, responseHandler);
     }
+    
+    public void getPlaylists(String mediaType, JsonHttpResponseHandler responseHandler)
+    {
+        JSONObject params   = new JSONObject();
+        String plalistsPath = mediaType.equals(StaticData.MEDIA_TYPE_AUDIO)? "musicplaylists" : "videoplaylists";
+
+        try
+        {
+            params.put("directory", "special://"+plalistsPath);
+        }
+        catch(JSONException e)
+        {
+            Log.v("FilesClient::getPlaylists", e.getMessage());
+            e.printStackTrace();
+        }
+        
+        post(NAMESPACE+ "GetRecentlyAddedAlbums", params, responseHandler);
+    }
 }

@@ -44,7 +44,7 @@ public class AudioLibraryClient  extends JsonRpcClient
         try
         {
             limits.put("start", 0);
-            limits.put("end", 4);
+            limits.put("end", 5);
             
             //properties.put("title");
             properties.put("artist");

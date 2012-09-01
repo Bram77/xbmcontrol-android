@@ -2,6 +2,8 @@ package com.sudosystems.xbmcontrol.controllers;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -49,7 +51,7 @@ public class RecentlyAddedController extends GlobalController
                         return;
                     }
                     
-                    Log.d("RecentlyAddedController::showMovies", "Xbmc returned an empty result");
+                    Log.v("RecentlyAddedController::showMovies", "Xbmc returned an empty result");
                 }
             }
             
@@ -87,7 +89,7 @@ public class RecentlyAddedController extends GlobalController
                         return;
                     }
                     
-                    Log.d("RecentlyAddedController::showEpisodes", "Xbmc returned an empty result");
+                    Log.v("RecentlyAddedController::showEpisodes", "Xbmc returned an empty result");
                 }
             }
             
@@ -125,7 +127,7 @@ public class RecentlyAddedController extends GlobalController
                         return;
                     }
                     
-                    Log.d("RecentlyAddedController::showEpisodes", "Xbmc returned an empty result");
+                    Log.v("RecentlyAddedController::showEpisodes", "Xbmc returned an empty result");
                 }
             }
             
@@ -144,7 +146,7 @@ public class RecentlyAddedController extends GlobalController
     private void handleResult(final String mediaType, final LinearLayout target, JSONObject result)
     {
         JSONArray media = result.optJSONArray(mediaType);
-        
+
         if(media != null && media.length() > 0)
         {
             final int maxItems = 3;
@@ -157,7 +159,7 @@ public class RecentlyAddedController extends GlobalController
                 TextView itemTitle              = (TextView) iTemplate.getChildAt(0);
                 TextView itemExtraInfo          = (TextView) iTemplate.getChildAt(2);
                 String thumbUrl                 = item.optString("thumbnail", "");
-                String cleanUrl                 = getThumbUrl(thumbUrl);
+                //String cleanUrl                 = getThumbUrl(thumbUrl);
                 String title                    = "";
                 String extraInfo                = "";
 
@@ -182,9 +184,29 @@ public class RecentlyAddedController extends GlobalController
                 itemTitle.setText(title);
                 itemExtraInfo.setText(extraInfo);
  
-                if(cleanUrl != null && StringUtils.isValidWebUrl(cleanUrl))
+                if(!thumbUrl.trim().equals(""))
                 {
-                    new ImageDownload(cleanUrl, new DownloadCompleteListener()
+                    String encodedPath = "";
+                    
+                    try
+                    {
+                        encodedPath = URLEncoder.encode(thumbUrl, "UTF-8");
+                    }
+                    catch(UnsupportedEncodingException e)
+                    {
+                        Log.v("RecentlyAddedController::handleResult", "Failed to encode image url");
+                        e.printStackTrace();
+                    }
+                    
+                    //Log.v("NON WEB IMAGE", "http://donda.nl:8080/image/"+encodedPath);
+                    
+                    String hostAddress      = this.Configuration.getConnectionValue("host_address");
+                    String hostPort         = this.Configuration.getConnectionValue("host_port");
+                    String username         = this.Configuration.getConnectionValue("username");
+                    String password         = this.Configuration.getConnectionValue("password");
+                    String imageDownloadUrl = "http://" +hostAddress+ ":" +hostPort+ "/image/" +encodedPath;
+                    
+                    new ImageDownload(imageDownloadUrl, username, password, new DownloadCompleteListener()
                     {
                         public void onTaskComplete(Object image)
                         {

@@ -1,6 +1,7 @@
 package com.sudosystems.xbmcontrol;
 
 import com.sudosystems.xbmc.client.RemoteClient;
+import com.sudosystems.xbmcontrol.R.id;
 import com.sudosystems.xbmcontrol.controllers.HomeController;
 
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.support.v4.app.NavUtils;
 
 public class RemoteActivity extends Activity
@@ -22,8 +24,12 @@ public class RemoteActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remote);
         
-        iController     = new HomeController(this);
-        String title    = getResources().getString(R.string.title_activity_remote);
+        iController                     = new HomeController(this);
+        String title                    = getResources().getString(R.string.title_activity_remote);
+        
+        //Hide openRemoteIntent button
+        ImageButton openRemoteButton    = (ImageButton) this.findViewById(id.open_remote);
+        openRemoteButton.setVisibility(View.GONE);
         
         setTitle(getResources().getString(R.string.title_global, title, title.length()));
     }
@@ -111,6 +117,11 @@ public class RemoteActivity extends Activity
     public void remoteSelect(View view)
     {
         remote.select();
+    }
+    
+    public void openHomeIntent(View view)
+    {
+        iController.openHomeIntent();
     }
     
     public void openAudioIntent(View view)

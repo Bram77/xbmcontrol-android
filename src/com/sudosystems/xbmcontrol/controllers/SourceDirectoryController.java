@@ -80,7 +80,7 @@ public class SourceDirectoryController extends GlobalController
             @Override
             public void onSuccess(JSONObject response)
             {
-                Log.v("RESULT", response.toString());
+                //Log.v("RESULT", response.toString());
                 
                 handleDisplayDirectoryResponse(response);
             }
@@ -123,7 +123,7 @@ public class SourceDirectoryController extends GlobalController
         
         if(files == null || files.length() == 0)
         {
-            self.notify("ERROR: No " +iActivityParams.getString("MEDIA_TYPE")+ " files found");
+            self.notify("ERROR: No " +iActivityParams.getString("MEDIA_TYPE")+ " found");
             openSourceDirectoryIntent(iActivityParams.getString("MEDIA_TYPE"), iActivityParams.getString("ROOT_PATH"), Util.getOneDirectoryUp(iActivityParams.getString("CURRENT_PATH")));
             return;
         }
@@ -146,6 +146,7 @@ public class SourceDirectoryController extends GlobalController
         final boolean isMovie       = (file.optString("type", "").equals("movie"));
         final boolean isWatched     = (file.optInt("playcount", 0) > 0);
         final boolean isVideo       = (iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO));
+        final boolean isAudio       = (iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO));
         
         if(isWatched && isVideo && Configuration.isHideWatchedEnabled())
         {
@@ -160,18 +161,15 @@ public class SourceDirectoryController extends GlobalController
         
         rowIcon.setImageResource(getMediaIcon(isDirectory, iActivityParams.getString("MEDIA_TYPE"), file.optString("type", "")));
         sourceRow.setOnCreateContextMenuListener(iActivity);
-        
-        if(!isDirectory)
+
+        //Apply watched status
+        if(isWatched && isVideo)
         {
-            //Apply watched status
-            if(isWatched && iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
-            {
-                rowWatchedIcon.setVisibility(View.VISIBLE);
-                rowLabel.setTextColor(Color.LTGRAY);
-            }
+            rowWatchedIcon.setVisibility(View.VISIBLE);
+            rowLabel.setTextColor(Color.LTGRAY);
         }
         
-        if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
+        if(isAudio)
         {
             sourceName = (isDirectory)? StringUtils.getDirectoryNameFormUrl(file.optString("file", "")) : StringUtils.getFileNameFormUrl(file.optString("file", ""), true);
         }
@@ -201,14 +199,13 @@ public class SourceDirectoryController extends GlobalController
                 }
                 else
                 {
-                    if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
+                    if(isAudio)
                     {
                         playDirectory(file, fIndex);
+                        return;
                     }
-                    else
-                    {
-                        playFile(file);
-                    }
+
+                    playFile(file);
                 }
             }
         });
@@ -251,7 +248,7 @@ public class SourceDirectoryController extends GlobalController
             @Override
             public void onFailure(Throwable e, String response) 
             {
-                self.notify("ERROR: Playback of '" +fileData.optString("label")+ "' could not be started");
+                showPlaybackFailedMessage(fileData.optString("label"));
             }
         });
     }
@@ -325,7 +322,7 @@ public class SourceDirectoryController extends GlobalController
                 @Override
                 public void onFailure(Throwable e, String response) 
                 {
-                    self.notify("ERROR: Playback of '" +title+ "' could not be started");
+                    showPlaybackFailedMessage(title);
                 }
             });
         }
@@ -341,12 +338,11 @@ public class SourceDirectoryController extends GlobalController
         
         if(playPlaylistResult != null && playPlaylistResult.equals("OK"))
         {
-            self.notify("Playback of '" +title+ "' started");
+            showPlaybackStartedMessage(title);
+            return;
         }
-        else
-        {
-            self.notify("ERROR: Playback of '" +title+ "' could not be started");
-        }
+
+        showPlaybackFailedMessage(title);
     }
     
     private void handlePlayFileResponse(JSONObject response, final String title)
@@ -355,11 +351,22 @@ public class SourceDirectoryController extends GlobalController
         
         if(playFileResult != null && playFileResult.equals("OK"))
         {
-            self.notify("Playback of '" +title+ "' started");
+            showPlaybackStartedMessage(title);
+            return;
         }
-        else
-        {
-            self.notify("ERROR: Playback of '" +title+ "' could not be started");
-        }
+
+        showPlaybackFailedMessage(title);
+    }
+    
+    private void showPlaybackStartedMessage(String fileTitle)
+    {
+        String message = iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_PICTURES)? "The image '" +fileTitle+ "' is being displayed" : "Playback of '" +fileTitle+ "' started"; 
+        self.notify(message);
+    }
+    
+    private void showPlaybackFailedMessage(String fileTitle)
+    {
+        String message = iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_PICTURES)? "ERROR: The image '" +fileTitle+ "' could not be displayed" : "ERROR: Playback of '" +fileTitle+ "' could not be started"; 
+        self.notify(message);
     }
 }

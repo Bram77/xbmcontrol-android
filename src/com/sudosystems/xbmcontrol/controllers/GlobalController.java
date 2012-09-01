@@ -4,6 +4,7 @@ import com.sudosystems.xbmc.client.RemoteClient;
 import com.sudosystems.xbmc.client.XbmcClient;
 import com.sudosystems.xbmcontrol.HomeActivity;
 import com.sudosystems.xbmcontrol.R;
+import com.sudosystems.xbmcontrol.R.anim;
 import com.sudosystems.xbmcontrol.RemoteActivity;
 import com.sudosystems.xbmcontrol.ConfigurationActivity;
 import com.sudosystems.xbmcontrol.SourceActivity;
@@ -39,6 +40,8 @@ public class GlobalController
     public TableRow iLoadingRow;
     protected Animation iFadeInAnimation;
     protected Animation iFadeOutAnimation;
+    protected Animation iSlideDownAnimation;
+    protected Animation iSlideUpAnimation;
     public Vibrator iVibrator;
     
     public GlobalController(Context context)
@@ -51,6 +54,8 @@ public class GlobalController
         iXbmc                       = new XbmcClient(context, Configuration.getConnectionData());
         iFadeInAnimation            = AnimationUtils.loadAnimation(iContext, R.anim.fade_in);
         iFadeOutAnimation           = AnimationUtils.loadAnimation(iContext, R.anim.fade_out);
+        iSlideDownAnimation         = AnimationUtils.loadAnimation(iContext, R.anim.slide_down);
+        iSlideUpAnimation           = AnimationUtils.loadAnimation(iContext, R.anim.slide_up);
         iVibrator                   = (Vibrator) iActivity.getSystemService(Context.VIBRATOR_SERVICE); 
         iLoadingRow                 = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.loading_template, null);
     }
@@ -58,7 +63,7 @@ public class GlobalController
     public void highlightNavigationButton()
     {
         Button navigationButton = null;
-        Drawable background = iActivity.getResources().getDrawable(R.drawable.button_shape_positive);
+        Drawable background     = iActivity.getResources().getDrawable(R.drawable.button_shape_positive);
         
         if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO))
         {
@@ -85,11 +90,13 @@ public class GlobalController
     {
         table.addView(iLoadingRow, new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
         iLoadingRow.startAnimation(iFadeInAnimation);
+        //iLoadingRow.startAnimation(iSlideDownAnimation);
     }
     
     public void hideLoadingRow(TableLayout table)
     {
         iLoadingRow.startAnimation(iFadeOutAnimation);
+        //iLoadingRow.startAnimation(iSlideUpAnimation);
         table.removeView(iLoadingRow);
     }
     
@@ -176,6 +183,7 @@ public class GlobalController
         iActivity.startActivity(intent);
         iActivity.overridePendingTransition(0, 0);
         iActivity.finish();
+        
     }
     
     public void openSourceIntent(String mediaType)
@@ -255,6 +263,7 @@ public class GlobalController
         iActivity.startActivity(intent);
         iActivity.overridePendingTransition(0, 0);
         iActivity.finish();
+        iActivity.overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
     }
 
     public void openSourceDirectoryIntent(String mediaType, String rootPath, String targetPath)

@@ -8,6 +8,7 @@ import java.net.URLConnection;
 
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 public class DownloadUtil extends AsyncTask<Void, Void, Object>
@@ -15,18 +16,21 @@ public class DownloadUtil extends AsyncTask<Void, Void, Object>
     private DownloadCompleteListener iCallback;
     private String iSourceUrl;
     private String iFileType;
+    private String iUsername;
+    private String iPassword;
     
-    public DownloadUtil(String fileType, String sourceUrl, DownloadCompleteListener callback)
+    public DownloadUtil(String fileType, String sourceUrl, String username, String password, DownloadCompleteListener callback)
     {
         iFileType   = fileType;
         iSourceUrl  = sourceUrl;
         iCallback   = callback;
+        iUsername   = username;
+        iPassword   = password;
     }
 
     @Override
     public void onPreExecute() 
     {
-        Log.v("DownloadUtil", "Download of '" +iSourceUrl+ "' starting");
     }
     
     @Override
@@ -40,11 +44,22 @@ public class DownloadUtil extends AsyncTask<Void, Void, Object>
         
         URLConnection connection;
         InputStream response = null;
-        
+
         try
         {
             connection  = (new URL(iSourceUrl)).openConnection();
+            
+            if(iUsername != null && iPassword != null)
+            {
+                String credentials = iUsername + ":" + iPassword;
+                String basicAuth   = "Basic " + new String(Base64.encode(credentials.getBytes(), Base64.DEFAULT));
+                connection.setRequestProperty ("Authorization", basicAuth);
+            }
+            
             connection.setUseCaches(true);
+            
+            Log.v("DownloadUtil", "Download of '" +iSourceUrl+ "' starting");
+            
             response    = connection.getInputStream();
         }
         catch(MalformedURLException e)

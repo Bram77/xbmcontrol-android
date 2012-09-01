@@ -4,6 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.sudosystems.xbmcontrol.R;
 import com.sudosystems.xbmcontrol.R.id;
 
 import android.app.AlertDialog;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
 import android.widget.TableRow;
 
 public class HomeController extends GlobalController
@@ -24,6 +26,10 @@ public class HomeController extends GlobalController
         super(context);
         iConfiguration                      = new ConfigurationController(context);
         nowPlayingStorage                   = iContext.getSharedPreferences(StaticData.STORAGE_NOWPLAYING, Context.MODE_PRIVATE);
+        TableRow playbackControlsContainer  = (TableRow) iActivity.findViewById(R.id.playback_controls_container);
+        
+        playbackControlsContainer.setVisibility(View.VISIBLE);
+        //playbackControlsContainer.startAnimation(iSlideDownAnimation);
     }
     
     /*

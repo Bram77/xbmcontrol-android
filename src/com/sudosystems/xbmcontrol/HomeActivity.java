@@ -68,6 +68,11 @@ public class HomeActivity extends Activity
         getIntent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         this.finish();
     }
+    
+    public void openHomeIntent(View view)
+    {
+        iController.openHomeIntent();
+    }
 
     public void openAudioIntent(View view)
     {
@@ -82,11 +87,6 @@ public class HomeActivity extends Activity
     public void openPicturesIntent(View view)
     {
         iController.openPicturesIntent();
-    }
-    
-    public void openRemoteIntent(View view)
-    {
-        iController.openRemoteIntent();
     }
     
     public void openConfigurationIntent(MenuItem menuItem)
@@ -123,5 +123,10 @@ public class HomeActivity extends Activity
     {
         iController.Remote.playbackNext();
         iController.iVibrator.vibrate(30);
+    }
+    
+    public void openRemoteIntent(View view)
+    {
+        iController.openRemoteIntent();
     }
 }

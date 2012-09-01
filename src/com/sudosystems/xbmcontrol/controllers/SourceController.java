@@ -92,5 +92,26 @@ public class SourceController extends GlobalController
             
             sourcesTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
         }
+        
+        if(iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO) || iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_VIDEO))
+        {
+            addPlayListsSource();
+        }
+    }
+    
+    private void addPlayListsSource()
+    {
+        String currentMediaType = iActivityParams.getString("MEDIA_TYPE");
+        TableRow sourceRow      = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.directory_template, null);
+        ImageView rowIcon       = (ImageView) sourceRow.findViewById(R.id.content_icon);
+        TextView sourceTitle    = (TextView) sourceRow.findViewById(R.id.content_label);
+        TextView sourcePath     = (TextView) sourceRow.findViewById(R.id.content_path);
+        String playlistsPath    = iActivityParams.getString("MEDIA_TYPE").equals(StaticData.MEDIA_TYPE_AUDIO)? StaticData.PLAYLISTS_TYPE_AUDIO : StaticData.PLAYLISTS_TYPE_VIDEO;
+        
+        rowIcon.setImageResource(getMediaIcon(true, currentMediaType));
+        sourceTitle.setText("XBMC Playlists");
+        sourcePath.setText(playlistsPath);
+        
+        sourcesTable.addView(sourceRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
     }
 }

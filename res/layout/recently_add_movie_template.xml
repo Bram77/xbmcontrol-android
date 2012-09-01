@@ -18,8 +18,8 @@
         android1:lines="1"
         android1:scrollHorizontally="true"
         android1:text="title"
-        android1:textColor="#BBBBBB"
-        android1:textSize="10dp"
+        android1:textColor="#AAAAAA"
+        android1:textSize="11dp"
         android1:textStyle="bold" />
 
     <ImageView
@@ -40,7 +40,7 @@
         android1:lines="1"
         android1:scrollHorizontally="true"
         android1:text=""
-        android1:textColor="#BBBBBB"
-        android1:textSize="10dp" />
+        android1:textColor="#AAAAAA"
+        android1:textSize="11dp" />
 
 </LinearLayout>

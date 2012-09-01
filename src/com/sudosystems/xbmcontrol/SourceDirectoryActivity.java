@@ -123,6 +123,11 @@ public class SourceDirectoryActivity extends Activity
         iController.openSourceDirectoryIntent();
     }
     
+    public void openHomeIntent(View view)
+    {
+        iController.openHomeIntent();
+    }
+    
     public void openAudioIntent(View view)
     {
         iController.openAudioIntent();
@@ -136,11 +141,6 @@ public class SourceDirectoryActivity extends Activity
     public void openPicturesIntent(View view)
     {
         iController.openPicturesIntent();
-    }
-    
-    public void openRemoteIntent(View view)
-    {
-        iController.openRemoteIntent();
     }
     
     //Playback controls
@@ -172,5 +172,10 @@ public class SourceDirectoryActivity extends Activity
     {
         iController.Remote.playbackNext();
         iController.iVibrator.vibrate(30);
+    }
+    
+    public void openRemoteIntent(View view)
+    {
+        iController.openRemoteIntent();
     }
 }

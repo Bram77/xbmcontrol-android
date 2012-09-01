@@ -7,7 +7,9 @@ public final class StaticData
     public static final String JSONRPC_VERSION          = "2.0";
     
     //Media types
-    public final static String MEDIA_TYPE_VIDEO     = "video";
-    public final static String MEDIA_TYPE_AUDIO     = "music";
-    public final static String MEDIA_TYPE_PICTURES  = "pictures";
+    public final static String MEDIA_TYPE_VIDEO         = "video";
+    public final static String MEDIA_TYPE_AUDIO         = "music";
+    public final static String MEDIA_TYPE_PICTURES      = "pictures";
+    public final static String PLAYLISTS_TYPE_AUDIO     = "special://musicplaylists";
+    public final static String PLAYLISTS_TYPE_VIDEO     = "special://videoplaylists";
 }
