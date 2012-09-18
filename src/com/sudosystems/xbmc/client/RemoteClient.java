@@ -51,7 +51,7 @@ public class RemoteClient extends AsyncTask<Object, Object, Object>
     
     public void home()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_ENTER, false, true, true, (short)0, (byte)0);
+        eventClient.sendButton("R1", ButtonCodes.REMOTE_DISPLAY, false, true, true, (short)0, (byte)0);
     }
     
     public void info()

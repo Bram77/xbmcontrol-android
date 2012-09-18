@@ -27,7 +27,7 @@ public class HomeActivity extends Activity
         iRecentlyAddedController    = new RecentlyAddedController(this);
         
         if(!iController.isConfigured())
-        {
+        { 
             iController.showInitConfigurationDialog();
             return;
         }

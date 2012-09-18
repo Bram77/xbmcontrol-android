@@ -10,7 +10,8 @@
 	    android:layout_height="fill_parent"
 	    android:layout_alignParentLeft="true"
 	    android:layout_alignParentTop="true"
-	    android:background="@drawable/black_striped_background" >
+	    android:background="@drawable/black_striped_background"
+	    android:visibility="visible" >
 	    
 	    <TableRow
             android:id="@+id/playback_controls_container"
@@ -26,85 +27,63 @@
         </TableRow>
 	
 	    <TableRow
-	        android:id="@+id/tableRow5"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" >
-	    </TableRow>
-	
-	    <TextView
-	        android:id="@+id/textView1"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:textAppearance="?android:attr/textAppearanceLarge" />
-	
-	    <TableRow
 	        android:id="@+id/tableRow1"
 	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_horizontal"
-	        android:layout_weight="0"
-	        android:gravity="center_horizontal" >
-	
-	        <Button
-	            android:id="@+id/remote_up_button"
-	            style="@style/ButtonTextNegative"
-	            android:layout_width="50dp"
+	        android:layout_height="wrap_content" >
+
+	        <ImageView
+	            android:id="@+id/imageView1"
+	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:background="@drawable/button_shape_negative"
+	            android:layout_weight="1"
 	            android:onClick="remoteUp"
-	            android:paddingBottom="20dp"
-	            android:paddingLeft="20dp"
-	            android:paddingRight="20dp"
-	            android:paddingTop="20dp"
-	            android:text="@string/up" />
+	            android:paddingBottom="10dp"
+	            android:paddingTop="10dp"
+	            android:src="@drawable/remote_up_128" android:contentDescription="TODO"/>
 	
 	    </TableRow>
 	
 	    <TableRow
 	        android:id="@+id/tableRow2"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:gravity="center_horizontal" >
-	
-	        <Button
-	            android:id="@+id/remote_left_button"
-	            style="@style/ButtonTextNegative"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+
+	        <LinearLayout
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:background="@drawable/button_shape_negative"
-	            android:onClick="remoteLeft"
-	            android:paddingBottom="20dp"
-	            android:paddingLeft="20dp"
-	            android:paddingRight="20dp"
-	            android:paddingTop="20dp"
-	            android:text="Left" />
-	
-	        <Button
-	            android:id="@+id/remote_select_button"
-	            style="@style/ButtonTextPositve"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/button_shape_positive"
-	            android:onClick="remoteSelect"
-	            android:paddingBottom="20dp"
-	            android:paddingLeft="20dp"
-	            android:paddingRight="20dp"
-	            android:paddingTop="20dp"
-	            android:text="Select" />
-	
-	        <Button
-	            android:id="@+id/remote_right_button"
-	            style="@style/ButtonTextNegative"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/button_shape_negative"
-	            android:onClick="remoteRight"
-	            android:paddingBottom="20dp"
-	            android:paddingLeft="20dp"
-	            android:paddingRight="20dp"
-	            android:paddingTop="20dp"
-	            android:text="Right" />
+	            android:layout_weight="1" >
+
+	            <ImageView
+	                android:id="@+id/imageView2"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.33"
+	                android:onClick="remoteLeft"
+	                android:paddingBottom="10dp"
+	                android:paddingTop="10dp"
+	                android:src="@drawable/remote_left_128" />
+
+	            <ImageView
+	                android:id="@+id/imageView3"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.33"
+	                android:onClick="remoteSelect"
+	                android:paddingBottom="10dp"
+	                android:paddingTop="10dp"
+	                android:src="@drawable/remote_select_128" />
+
+	            <ImageView
+	                android:id="@+id/imageView4"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="0.33"
+	                android:onClick="remoteRight"
+	                android:paddingBottom="10dp"
+	                android:paddingTop="10dp"
+	                android:src="@drawable/remote_right_128" />
+
+	        </LinearLayout>
 	
 	    </TableRow>
 	
@@ -113,19 +92,16 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:gravity="center_horizontal" >
-	
-	        <Button
-	            android:id="@+id/remote_down_button"
-	            style="@style/ButtonTextNegative"
+
+	        <ImageView
+	            android:id="@+id/imageView5"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:background="@drawable/button_shape_negative"
+	            android:layout_weight="1"
 	            android:onClick="remoteDown"
-	            android:paddingBottom="20dp"
-	            android:paddingLeft="20dp"
-	            android:paddingRight="20dp"
-	            android:paddingTop="20dp"
-	            android:text="Down" />
+	            android:paddingBottom="10dp"
+	            android:paddingTop="15dp"
+	            android:src="@drawable/remote_down_128" />
 	
 	    </TableRow>
 	
@@ -133,46 +109,55 @@
 	        android:id="@+id/tableRow4"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="60dp"
-	        android:layout_weight="1"
-	        android:gravity="center_horizontal" >
-	
-	        <Button
-	            android:id="@+id/remote_back_button"
-	            style="@style/ButtonTextPositve"
+	        android:layout_marginTop="90dp"
+	        android:layout_weight="0" >
+
+	        <LinearLayout
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
-	            android:layout_weight="1"
-	            android:background="@drawable/button_shape_positive"
-	            android:onClick="remoteBack"
-	            android:text="back" />
-	
-	        <Button
-	            android:id="@+id/remote_context_menu_button"
-	            style="@style/ButtonTextPositve"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/button_shape_positive"
-	            android:onClick="remoteContextMenu"
-	            android:text="menu" />
-	
-	        <Button
-	            android:id="@+id/remote_info_button"
-	            style="@style/ButtonTextPositve"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/button_shape_positive"
-	            android:onClick="remoteInfo"
-	            android:text="info" />
-	
-	        <Button
-	            android:id="@+id/remote_home_button"
-	            style="@style/ButtonTextPositve"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/button_shape_positive"
-	            android:onClick="remoteHome"
-	            android:text="home" />
+	            android:layout_weight="1" >
+
+	            <ImageView
+	                android:id="@+id/imageView6"
+	                android:layout_width="40dp"
+	                android:layout_height="40dp"
+	                android:layout_weight="0.2"
+	                android:onClick="remoteBack"
+	                android:src="@drawable/remote_back_128" />
+
+	            <ImageView
+	                android:id="@+id/imageView9"
+	                android:layout_width="40dp"
+	                android:layout_height="40dp"
+	                android:layout_weight="0.2"
+	                android:onClick="remoteHome"
+	                android:src="@drawable/remote_home_128" />
+
+	            <ImageView
+	                android:id="@+id/imageView7"
+	                android:layout_width="40dp"
+	                android:layout_height="40dp"
+	                android:layout_weight="0.2"
+	                android:onClick="remoteMenu"
+	                android:src="@drawable/remote_menu_128" />
+
+	            <ImageView
+	                android:id="@+id/imageView10"
+	                android:layout_width="40dp"
+	                android:layout_height="40dp"
+	                android:layout_weight="0.2"
+	                android:onClick="remoteContextMenu"
+	                android:src="@drawable/remote_context_menu_128" />
+
+	            <ImageView
+	                android:id="@+id/imageView8"
+	                android:layout_width="40dp"
+	                android:layout_height="40dp"
+	                android:layout_weight="0.2"
+	                android:onClick="remoteInfo"
+	                android:src="@drawable/remote_info_128" />
+
+	        </LinearLayout>
 	
 	    </TableRow>
 	    
@@ -181,7 +166,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_gravity="bottom|center_horizontal"
-	        android:layout_weight="0"
+	        android:layout_weight="1"
 	        android:gravity="bottom|center_horizontal"
 	        android:paddingBottom="5dp"
 	        android:paddingTop="5dp" >
@@ -209,7 +194,7 @@
 		            android:layout_weight="1"
 		            android:background="@drawable/button_shape_negative"
 		            android:onClick="openHomeIntent"
-		            android:text="Home" />
+		            android:text="@string/home" />
 		
 		        <Button
 		            android:id="@+id/navigation_music"
@@ -221,7 +206,7 @@
 		            android:layout_weight="1"
 		            android:background="@drawable/button_shape_negative"
 		            android:onClick="openAudioIntent"
-		            android:text="Music" />
+		            android:text="@string/music" />
 		
 		        <Button
 		            android:id="@+id/navigation_video"
@@ -233,7 +218,7 @@
 		            android:layout_weight="1"
 		            android:background="@drawable/button_shape_negative"
 		            android:onClick="openVideoIntent"
-		            android:text="Videos" />
+		            android:text="@string/videos" />
 		
 		        <Button
 		            android:id="@+id/navigation_pictures"
@@ -245,7 +230,7 @@
 		            android:layout_weight="1"
 		            android:background="@drawable/button_shape_negative"
 		            android:onClick="openPicturesIntent"
-		            android:text="Pictures" />
+		            android:text="@string/pictures" />
 		
 		    </TableRow>
 		</TableLayout>

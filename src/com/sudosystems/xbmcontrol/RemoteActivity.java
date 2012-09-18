@@ -1,6 +1,5 @@
 package com.sudosystems.xbmcontrol;
 
-import com.sudosystems.xbmc.client.RemoteClient;
 import com.sudosystems.xbmcontrol.R.id;
 import com.sudosystems.xbmcontrol.controllers.HomeController;
 
@@ -15,7 +14,6 @@ import android.support.v4.app.NavUtils;
 
 public class RemoteActivity extends Activity
 {
-    private RemoteClient remote;
     private HomeController iController;
 
     @Override
@@ -77,46 +75,61 @@ public class RemoteActivity extends Activity
     public void remoteUp(View view)
     {
         iController.Remote.up();
+        iController.iVibrator.vibrate(30);
     }
     
     public void remoteDown(View view)
     {
         iController.Remote.down();
+        iController.iVibrator.vibrate(30);
     }
     
     public void remoteLeft(View view)
     {
         iController.Remote.left();
+        iController.iVibrator.vibrate(30);
     }
     
     public void remoteRight(View view)
     {
         iController.Remote.right();
+        iController.iVibrator.vibrate(30);
     }
     
     public void remoteBack(View view)
     {
         iController.Remote.back();
+        iController.iVibrator.vibrate(30);
     }
     
     public void remoteHome(View view)
     {
         iController.Remote.home();
+        iController.iVibrator.vibrate(30);
     }
     
     public void remoteContextMenu(View view)
     {
         iController.Remote.contextMenu();
+        iController.iVibrator.vibrate(30);
+    }
+    
+    public void remoteMenu(View view)
+    {
+        iController.Remote.menu();
+        iController.iVibrator.vibrate(30);
     }
     
     public void remoteInfo(View view)
     {
         iController.Remote.info();
+        iController.iVibrator.vibrate(30);
     }
     
     public void remoteSelect(View view)
     {
-        remote.select();
+    	iController.Remote.select();
+        iController.iVibrator.vibrate(30);
     }
     
     public void openHomeIntent(View view)
