@@ -79,9 +79,4 @@ public class HomeController extends GlobalController
             })
             .show();
     }
-    
-    public boolean isConfigured()
-    {
-        return (!iConfiguration.getConnectionValue("host_address").equals(""));
-    }
 }

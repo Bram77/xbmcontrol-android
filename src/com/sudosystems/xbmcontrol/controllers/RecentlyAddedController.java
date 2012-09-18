@@ -151,7 +151,7 @@ public class RecentlyAddedController extends GlobalController
         {
             final int maxItems = 3;
             int limit           = (media.length() > maxItems)? maxItems : media.length();
-            
+
             for(int i=0; i<limit; i++)
             {
                 JSONObject item                 = media.optJSONObject(i);
@@ -161,13 +161,13 @@ public class RecentlyAddedController extends GlobalController
                 String thumbUrl                 = item.optString("thumbnail", "");
                 //String cleanUrl                 = getThumbUrl(thumbUrl);
                 String title                    = "";
-                String extraInfo                = "";
+                String extraInfo                = ""; 
 
                 if(mediaType.equals("movies"))
                 {
                     title       = item.optString("label", "");
                     extraInfo   = item.optString("rating", "");
-                    extraInfo   = "rating "+extraInfo.substring(0,3); 
+                    extraInfo   = (extraInfo.length() > 3) ? "rating "+extraInfo.substring(0,3) : ""; 
                 }
                 else if(mediaType.equals("episodes"))
                 {
@@ -205,7 +205,7 @@ public class RecentlyAddedController extends GlobalController
                     String username         = this.Configuration.getConnectionValue("username");
                     String password         = this.Configuration.getConnectionValue("password");
                     String imageDownloadUrl = "http://" +hostAddress+ ":" +hostPort+ "/image/" +encodedPath;
-                    
+
                     new ImageDownload(imageDownloadUrl, username, password, new DownloadCompleteListener()
                     {
                         public void onTaskComplete(Object image)

@@ -52,7 +52,10 @@ public class ConfigurationActivity extends Activity
 
     public void storeConfiguration(View view)
     {
-        openHomeIntent();
+    	if(iController.storeConnectionData())
+    	{
+    		openHomeIntent();
+    	}
     }
     
     public void openHomeIntent(View view)

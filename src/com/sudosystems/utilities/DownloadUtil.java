@@ -58,19 +58,20 @@ public class DownloadUtil extends AsyncTask<Void, Void, Object>
             
             connection.setUseCaches(true);
             
-            Log.v("DownloadUtil", "Download of '" +iSourceUrl+ "' starting");
+            //Log.v("DownloadUtil", "Download of '" +iSourceUrl+ "' starting");
             
-            response    = connection.getInputStream();
+            response = connection.getInputStream();
         }
         catch(MalformedURLException e)
         {
             Log.e("DownloadUtil", "The file could not be downloaded from: " +iSourceUrl);
-            e.printStackTrace();
+            //e.printStackTrace();
+            return null;
         }
         catch(IOException e)
         {
             Log.e("DownloadUtil", "Error connecting to remote server");
-            e.printStackTrace();
+            //e.printStackTrace();
             return null;
         }
         

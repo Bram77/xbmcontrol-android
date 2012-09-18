@@ -6,17 +6,21 @@ import java.net.UnknownHostException;
 import org.xbmc.eventclient.ButtonCodes;
 import org.xbmc.eventclient.EventClient;
 
+import com.sudosystems.xbmcontrol.controllers.GlobalController;
+
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class RemoteClient extends AsyncTask<Object, Object, Object>
 {
+	private GlobalController iController;
     private EventClient eventClient;
     private static int UDP_PORT         = 9777;
     private static String HOST_ADDRESS  = "donda.nl";
     
-    public RemoteClient()
+    public RemoteClient(GlobalController controller)
     {
+    	iController = controller;
         this.execute();
     }
 
@@ -109,9 +113,14 @@ public class RemoteClient extends AsyncTask<Object, Object, Object>
     @Override
     protected Object doInBackground(Object... params)
     {
+    	if(!iController.isConfigured())
+    	{
+    		return null;
+    	}
+    	
         try
         {
-            eventClient = new EventClient(InetAddress.getByName(HOST_ADDRESS), UDP_PORT, "XBMControl");
+            eventClient = new EventClient(InetAddress.getByName(iController.Configuration.getConnectionValue("host_address")), UDP_PORT, "XBMControl");
         }
         catch(UnknownHostException e)
         {

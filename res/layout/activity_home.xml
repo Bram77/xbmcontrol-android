@@ -30,7 +30,8 @@
             android:id="@+id/recently_added_main_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
+            android:gravity="center_horizontal"
+            android:visibility="gone" >
 
             <TextView
                 android:id="@+id/textView2"
@@ -51,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:paddingBottom="3dp"
-            android:visibility="visible" >
+            android:visibility="gone" >
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -145,7 +146,8 @@
         <TableRow
             android:id="@+id/recently_added_types"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:visibility="gone" >
 
             <LinearLayout
                 android:layout_width="match_parent"

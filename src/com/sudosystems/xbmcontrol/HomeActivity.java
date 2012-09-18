@@ -32,9 +32,9 @@ public class HomeActivity extends Activity
             return;
         }
         
-        iRecentlyAddedController.showMovies((LinearLayout) this.findViewById(R.id.recently_added_movies_container));
-        iRecentlyAddedController.showEpisodes((LinearLayout) this.findViewById(R.id.recently_added_episodes_container));
-        iRecentlyAddedController.showAlbums((LinearLayout) this.findViewById(R.id.recently_added_albums_container));
+        //iRecentlyAddedController.showMovies((LinearLayout) this.findViewById(R.id.recently_added_movies_container));
+        //iRecentlyAddedController.showEpisodes((LinearLayout) this.findViewById(R.id.recently_added_episodes_container));
+        //iRecentlyAddedController.showAlbums((LinearLayout) this.findViewById(R.id.recently_added_albums_container));
         
         //iController.displayNowPlayingInfo();
         //startService(new Intent(this, NowPlayingService.class));

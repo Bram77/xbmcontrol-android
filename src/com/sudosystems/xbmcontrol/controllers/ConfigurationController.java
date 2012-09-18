@@ -52,10 +52,12 @@ public class ConfigurationController
             return false;
         }
         
+        Log.e("AFTER SAVE", iStorage.getString(StaticData.STORAGE_CONFIGURATION_CONNECTION, "empty"));
+        
         Editor configurationEditor = iStorage.edit();
         configurationEditor.putString(StaticData.STORAGE_CONFIGURATION_CONNECTION, connectionParams.toString());
         configurationEditor.commit();
-        
+
         return true;
     }
 

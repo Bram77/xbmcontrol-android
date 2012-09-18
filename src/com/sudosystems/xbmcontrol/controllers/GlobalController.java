@@ -46,11 +46,11 @@ public class GlobalController
     
     public GlobalController(Context context)
     {
-        Remote                      = new RemoteClient();
         iContext                    = context;
         iActivity                   = (Activity) context;
         iActivityParams             = iActivity.getIntent().getExtras();
         Configuration               = new ConfigurationController(context);
+        Remote                      = new RemoteClient(this);
         iXbmc                       = new XbmcClient(context, Configuration.getConnectionData());
         iFadeInAnimation            = AnimationUtils.loadAnimation(iContext, R.anim.fade_in);
         iFadeOutAnimation           = AnimationUtils.loadAnimation(iContext, R.anim.fade_out);
@@ -86,16 +86,21 @@ public class GlobalController
         navigationButton.setTextAppearance(iContext, R.style.ButtonTextPositve);
     }
     
+    public boolean isConfigured()
+    {
+        return (!Configuration.getConnectionValue("host_address").equals(""));
+    }
+    
     public void showLoadingRow(TableLayout table)
     {
         table.addView(iLoadingRow, new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-        iLoadingRow.startAnimation(iFadeInAnimation);
+        //iLoadingRow.startAnimation(iFadeInAnimation);
         //iLoadingRow.startAnimation(iSlideDownAnimation);
     }
     
     public void hideLoadingRow(TableLayout table)
     {
-        iLoadingRow.startAnimation(iFadeOutAnimation);
+        //iLoadingRow.startAnimation(iFadeOutAnimation);
         //iLoadingRow.startAnimation(iSlideUpAnimation);
         table.removeView(iLoadingRow);
     }
