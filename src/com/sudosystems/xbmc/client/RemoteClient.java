@@ -1,5 +1,6 @@
 package com.sudosystems.xbmc.client;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -14,9 +15,8 @@ import android.util.Log;
 public class RemoteClient extends AsyncTask<Object, Object, Object>
 {
 	private GlobalController iController;
-    private EventClient eventClient;
-    private static int UDP_PORT         = 9777;
-    private static String HOST_ADDRESS  = "donda.nl";
+    private EventClient ioEventClient;
+    private static int UDP_PORT = 9777;
     
     public RemoteClient(GlobalController controller)
     {
@@ -26,88 +26,107 @@ public class RemoteClient extends AsyncTask<Object, Object, Object>
 
     public void left()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_LEFT, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_LEFT, false, true, true, (short)0, (byte)0);
     }
     
     public void right()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_RIGHT, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_RIGHT, false, true, true, (short)0, (byte)0);
     }
     
     public void up()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_UP, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_UP, false, true, true, (short)0, (byte)0);
     }
     
     public void down()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_DOWN, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_DOWN, false, true, true, (short)0, (byte)0);
     }
     
     public void select()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_SELECT, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_SELECT, false, true, true, (short)0, (byte)0);
     }
     
     public void home()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_DISPLAY, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("KB", ButtonCodes.KEYBOARD_ESCAPE, false, true, true, (short)0, (byte)0);
     }
     
     public void info()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_INFO, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_INFO, false, true, true, (short)0, (byte)0);
     }
 
     public void back()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_BACK, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_BACK, false, true, true, (short)0, (byte)0);
     }
 
     public void contextMenu()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_TITLE, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_TITLE, false, true, true, (short)0, (byte)0);
+    }
+    
+    public void shutDown()
+    {
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_POWER, false, true, true, (short)0, (byte)0);
     }
     
     public void menu()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_MENU, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_MENU, false, true, true, (short)0, (byte)0);
     }
     
     public void volumeUp()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_VOLUME_PLUS, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_VOLUME_PLUS, false, true, true, (short)0, (byte)0);
     }
     
     public void volumeDown()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_VOLUME_MINUS, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_VOLUME_MINUS, false, true, true, (short)0, (byte)0);
     }
     
     //Playback controls
     public void playbackPrevious()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_SKIP_MINUS, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_SKIP_MINUS, false, true, true, (short)0, (byte)0);
     }
     
     public void playbackPause()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_PAUSE, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_PAUSE, false, true, true, (short)0, (byte)0);
     }
     
     public void playbackStart()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_PLAY, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_PLAY, false, true, true, (short)0, (byte)0);
     }
     
     public void playbackStop()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_STOP, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_STOP, false, true, true, (short)0, (byte)0);
     }
     
     public void playbackNext()
     {
-        eventClient.sendButton("R1", ButtonCodes.REMOTE_SKIP_PLUS, false, true, true, (short)0, (byte)0);
+        ioEventClient.sendButton("R1", ButtonCodes.REMOTE_SKIP_PLUS, false, true, true, (short)0, (byte)0);
+    }
+    
+    public boolean ping()
+    {
+    	try 
+    	{
+			ioEventClient.ping();
+			return true;
+		} 
+    	catch(IOException e) 
+    	{
+			Log.v("RemoteClient::ping", "Connection to XBMC lost");
+			return false;
+		}
     }
 
     @Override
@@ -120,7 +139,7 @@ public class RemoteClient extends AsyncTask<Object, Object, Object>
     	
         try
         {
-            eventClient = new EventClient(InetAddress.getByName(iController.Configuration.getConnectionValue("host_address")), UDP_PORT, "XBMControl");
+            ioEventClient = new EventClient(InetAddress.getByName(iController.Configuration.getConnectionValue("host_address")), UDP_PORT, "XBMControl");
         }
         catch(UnknownHostException e)
         {

@@ -2,5 +2,7 @@
     <item android:id="@+id/menu_settings"
         android:title="@string/menu_settings"
         android:orderInCategory="100"
-        android:showAsAction="never" android:onClick="openConfigurationIntent"/>
+        android:showAsAction="never" android:onClick="openConfigurationIntent"/><item android:id="@+id/menu_shutdown" android:title="Shutdown XBMC" android:onClick="shutDown" android:orderInCategory="101"></item>
+    
+        <item android:id="@+id/menu_exit" android:title="Close" android:onClick="closeApplication" android:orderInCategory="102"></item>
 </menu>

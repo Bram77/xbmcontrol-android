@@ -13,8 +13,8 @@
         android:layout_weight="0.2"
         android:background="@drawable/button_shape_negative"
         android:onClick="playbackPrevious"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:src="@drawable/playback_previous_48" />
 
     <ImageButton
@@ -24,8 +24,8 @@
         android:layout_weight="0.2"
         android:background="@drawable/button_shape_negative"
         android:onClick="playbackPause"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:src="@drawable/playback_pause_48"
         android:visibility="gone" />
 
@@ -36,8 +36,8 @@
         android:layout_weight="0.2"
         android:background="@drawable/button_shape_negative"
         android:onClick="playbackStart"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:src="@drawable/playback_start_48" />
 
     <ImageButton
@@ -47,8 +47,8 @@
         android:layout_weight="0.2"
         android:background="@drawable/button_shape_negative"
         android:onClick="playbackStop"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:src="@drawable/playback_stop_48" />
 
     <ImageButton
@@ -58,8 +58,8 @@
         android:layout_weight="0.2"
         android:background="@drawable/button_shape_negative"
         android:onClick="playbackNext"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:src="@drawable/playback_next_48" />
     
     <ImageButton
@@ -69,8 +69,8 @@
         android:layout_weight="0.15"
         android:background="@drawable/button_shape_negative"
         android:onClick="openRemoteIntent"
-        android:paddingBottom="3dp"
-        android:paddingTop="3dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
         android:src="@drawable/arrow_right_48" />
 
 </LinearLayout>

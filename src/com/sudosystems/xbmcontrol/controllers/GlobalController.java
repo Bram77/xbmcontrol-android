@@ -1,5 +1,9 @@
 package com.sudosystems.xbmcontrol.controllers;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.sudosystems.xbmc.client.PingResponseHandler;
 import com.sudosystems.xbmc.client.RemoteClient;
 import com.sudosystems.xbmc.client.XbmcClient;
 import com.sudosystems.xbmcontrol.HomeActivity;
@@ -11,12 +15,16 @@ import com.sudosystems.xbmcontrol.SourceActivity;
 import com.sudosystems.xbmcontrol.SourceDirectoryActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -30,6 +38,7 @@ import android.widget.Toast;
 
 public class GlobalController
 {
+	private static long PING_INTERVAL = 2000;
     public ConfigurationController Configuration;
     public XbmcClient iXbmc;
     public Context iContext;
@@ -43,6 +52,10 @@ public class GlobalController
     protected Animation iSlideDownAnimation;
     protected Animation iSlideUpAnimation;
     public Vibrator iVibrator;
+    
+    //private Timer ioPingTimer;
+    //private final Handler ioPingHandler;
+    //private boolean isConnected = false;
     
     public GlobalController(Context context)
     {
@@ -58,6 +71,8 @@ public class GlobalController
         iSlideUpAnimation           = AnimationUtils.loadAnimation(iContext, R.anim.slide_up);
         iVibrator                   = (Vibrator) iActivity.getSystemService(Context.VIBRATOR_SERVICE); 
         iLoadingRow                 = (TableRow) iActivity.getLayoutInflater().inflate(R.layout.loading_template, null);
+        //ioPingHandler 				= new Handler();
+        //ioPingTimer					= new Timer();
     }
     
     public void highlightNavigationButton()
@@ -84,6 +99,112 @@ public class GlobalController
         
         navigationButton.setBackgroundDrawable(background);
         navigationButton.setTextAppearance(iContext, R.style.ButtonTextPositve);
+    }
+    
+    /*
+    public void initPing(long interval)
+    {
+    	TimerTask pingTask = new TimerTask()
+    	{
+    	    public void run() 
+    	    {
+    	    	ioPingHandler.post(new Runnable() 
+	            {
+                    public void run() 
+                    {
+                    	executePing();
+                    }
+	           });
+	    }};
+    	    
+	    ioPingTimer.scheduleAtFixedRate(pingTask, 0, interval);
+    }
+    
+    public void initPing()
+    {
+    	initPing(PING_INTERVAL);
+    }
+    
+    public boolean isConnected()
+    {
+    	return isConnected;
+    }
+
+    private void executePing()
+    {
+    	iXbmc.System.ping(new PingResponseHandler()
+    	{
+    		public void onSuccess() 
+    		{
+    			Log.v("ping", "pong");
+    			isConnected = true;
+			}
+    		
+    		public void onError()
+    		{
+    			Log.v("ping", "false");
+    			isConnected = false;
+    			handleConnectionLost();
+    		}
+    	});
+    }
+    */
+    
+    public void handleConnectionLost()
+    {
+    	//ioPingTimer.cancel();
+    	showConnectionLoastDialog();
+    }
+    
+    public void showConnectionLoastDialog()
+    {
+    	new AlertDialog.Builder(iContext)
+	        .setIcon(android.R.drawable.ic_dialog_alert)
+	        .setTitle("Connection lost")
+	        .setMessage("Are you sure the HTTP and Event servers in XBMC are enabled?")
+	        .setPositiveButton("Configure", new DialogInterface.OnClickListener() 
+	        {
+	            public void onClick(DialogInterface dialog, int which)
+	            {
+	            	openConfigurationIntent();
+	            }
+	
+	        })
+	        .setNegativeButton("Close", new DialogInterface.OnClickListener() 
+	        {
+	            public void onClick(DialogInterface dialog, int which)
+	            {
+	            	iActivity.finish();    
+	            }
+	
+	        })
+	        .show();
+    }
+    
+    public void showShutdownDialog()
+    {
+    	new AlertDialog.Builder(iContext)
+	        .setIcon(android.R.drawable.ic_dialog_alert)
+	        .setTitle("Confirm shutdown")
+	        .setMessage("Are you sure you want to turn off the computer running XBMC?")
+	        .setPositiveButton("Yes", new DialogInterface.OnClickListener() 
+	        {
+	            public void onClick(DialogInterface dialog, int which)
+	            {
+	            	Remote.shutDown();
+	                iVibrator.vibrate(60);  
+	            }
+	
+	        })
+	        .setNegativeButton("No", new DialogInterface.OnClickListener() 
+	        {
+	            public void onClick(DialogInterface dialog, int which)
+	            {
+	            	dialog.cancel();    
+	            }
+	
+	        })
+	        .show();
     }
     
     public boolean isConfigured()

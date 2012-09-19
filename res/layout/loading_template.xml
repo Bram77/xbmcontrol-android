@@ -6,19 +6,84 @@
     android:gravity="center_horizontal|center_vertical"
     android:paddingTop="100dp" >
 
-    <TextView
-        android:id="@+id/textView1"
-        style="@style/DefaultTextView"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:background="@drawable/text_view_rounded_corners"
-        android:gravity="center_horizontal|center_vertical"
-        android:padding="12dp"
-        android:paddingLeft="0dp"
-        android:text=".: LOADING DATA :."
-        android:textColor="#FFFFFF"
-        android:textSize="14dp"
-        android:typeface="normal" />
+        android:layout_height="wrap_content" >
+        
+        <ProgressBar
+            android:layout_width="2dp"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="0dp" />
+        
+        <ProgressBar
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="0dp" />
+        
+        <ProgressBar
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="0dp" />
+
+        <ProgressBar
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="0dp" />
+        
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="1dp" />
+        
+        <TextView
+            android:id="@+id/textView1"
+            style="@style/DefaultTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/text_view_rounded_corners"
+            android:gravity="center_horizontal|center_vertical"
+            android:padding="12dp"
+            android:paddingLeft="0dp"
+            android:text=" LOADING DATA "
+            android:textColor="#FFFFFF"
+            android:textSize="14dp"
+            android:typeface="normal" />
+        
+        <ProgressBar
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="1dp" />
+
+        <ProgressBar
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="0dp" />
+        
+        <ProgressBar
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="0dp" />
+        
+        <ProgressBar
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="0dp" />
+        
+        <ProgressBar
+            android:layout_width="2dp"
+            android:layout_height="2dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="0dp" />
+
+    </LinearLayout>
 
  </TableRow>

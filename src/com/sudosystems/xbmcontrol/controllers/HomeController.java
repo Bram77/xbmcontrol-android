@@ -1,12 +1,7 @@
 package com.sudosystems.xbmcontrol.controllers;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import com.sudosystems.xbmcontrol.R;
-import com.sudosystems.xbmcontrol.R.id;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;

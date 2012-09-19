@@ -41,7 +41,7 @@ public class HomeActivity extends Activity
     }
     
     @Override
-    public void onStop() 
+    public void onStop()
     {
         super.onStop();
         //stopService(new Intent(this, NowPlayingService.class));
@@ -94,6 +94,16 @@ public class HomeActivity extends Activity
         iController.openConfigurationIntent();
     }
     
+    public void shutDown(MenuItem menuItem)
+    {
+        iController.showShutdownDialog();
+    }
+    
+    public void closeApplication(MenuItem menuItem)
+    {
+        this.finish();
+    }
+
     //Playback controls
     public void playbackPrevious(View view)
     {

@@ -12,6 +12,7 @@ public class SystemClient extends JsonRpcClient
 {
     private static final String NAMESPACE   = "JSONRPC.";
     private static final String APP_NAME    = "XBMControl";
+    private static final int PING_TIMEOUT 	= 2000;
     
     public SystemClient(Context context, Configuration configuration)
     {
@@ -23,9 +24,30 @@ public class SystemClient extends JsonRpcClient
         post(NAMESPACE+ "Introspect", responseHandler);
     }
     
-    public void ping(JsonHttpResponseHandler responseHandler)
+    public void ping(final PingResponseHandler pingResponseHandler)
     {
-        post(NAMESPACE+ "Ping", responseHandler);
+    	setConnectionTimeout(PING_TIMEOUT);
+    	
+        post(NAMESPACE+ "Ping", new JsonHttpResponseHandler()
+        {
+            @Override
+            public void onSuccess(JSONObject response)
+            {
+            	pingResponseHandler.onSuccess();
+            }
+            
+            @Override
+            public void onFailure(Throwable e, String response) 
+            {
+            	pingResponseHandler.onError();
+            }
+            
+            @Override
+            public void onFinish()
+            {
+            	setDefaultConnectionTimeout();
+            }
+        });
     }
     
     public void notify(String message, JsonHttpResponseHandler responseHandler)

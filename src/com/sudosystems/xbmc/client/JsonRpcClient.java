@@ -13,18 +13,31 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 public class JsonRpcClient
 {
     private static AsyncHttpClient iClient;
+    private Configuration ioConfiguration;
     private Context iContext;
     private String baseUrl;
     
     public JsonRpcClient(Context context, Configuration configuration)
     {
-        iContext    = context;
-        baseUrl     = "http://" +configuration.getHost()+ ":" +configuration.getPort()+ "/jsonrpc";
-        iClient     = new AsyncHttpClient();
-        iClient.setTimeout(Integer.parseInt(configuration.getConnectionTimeout()));
+        iContext    	= context;
+        ioConfiguration	= configuration;
+        baseUrl     	= "http://" +configuration.getHost()+ ":" +configuration.getPort()+ "/jsonrpc";
+        iClient     	= new AsyncHttpClient();
+        
+        setDefaultConnectionTimeout();
         iClient.setBasicAuth(configuration.getUsername(), configuration.getPassword());
         iClient.addHeader("Accept", StaticData.CONNTECTION_CONTENT_TYPE);
         iClient.addHeader("Content-Type", StaticData.CONNTECTION_CONTENT_TYPE);
+    }
+    
+    public void setConnectionTimeout(int timeout)
+    {
+    	iClient.setTimeout(timeout);
+    }
+    
+    public void setDefaultConnectionTimeout()
+    {
+    	setConnectionTimeout(Integer.parseInt(ioConfiguration.getConnectionTimeout()));
     }
     
     public void cancelRequest()
@@ -36,7 +49,7 @@ public class JsonRpcClient
     {
         JSONObject rpcParams = buildRpcObject(method, params);
         
-        Log.v("POST PARAMS", rpcParams.toString());
+        //Log.v("POST PARAMS", rpcParams.toString());
         
         StringEntity oRawPostParams;
         
